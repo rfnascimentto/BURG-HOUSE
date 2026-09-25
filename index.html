@@ -1,3161 +1,1660 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BURG HOUSE — Cardápio</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-<title>Calculadora Profissional de Serralheria</title>
+        :root {
+            --primary: #e63946;
+            --primary-dark: #c92f3b;
+            --dark: #171717;
+            --dark-2: #242424;
+            --light: #f7f7f7;
+            --white: #ffffff;
+            --gray: #777;
+            --border: #e5e5e5;
+            --green: #25d366;
+        }
 
-<meta name="theme-color" content="#1d4ed8">
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+        }
 
-<link rel="manifest" href="manifest.json">
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
 
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/print.css" media="print">
+        header {
+            background: var(--dark);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 3px 15px rgba(0,0,0,.15);
+        }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        header h1 {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+        header p {
+            color: #ddd;
+            margin-top: 5px;
+        }
 
-<script defer src="js/materiais.js"></script>
-<script defer src="js/interface.js"></script>
-<script defer src="js/calculos.js"></script>
-<script defer src="js/lista-corte.js"></script>
-<script defer src="js/pdf.js"></script>
-<script defer src="js/app.js"></script>
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 25px 18px 120px;
+        }
 
+        /* FILTROS */
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .filter-btn {
+            border: none;
+            background: white;
+            border: 1px solid var(--border);
+            padding: 11px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: .2s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* CATEGORIA */
+        .category-title {
+            margin: 30px 0 15px;
+            font-size: 25px;
+        }
+
+        /* PRODUTOS */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,.07);
+            display: flex;
+            flex-direction: column;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,.11);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 190px;
+            background: linear-gradient(135deg, #ddd, #f3f3f3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 15px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-content {
+            padding: 17px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .product-content h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .product-description {
+            color: var(--gray);
+            line-height: 1.45;
+            font-size: 14px;
+            margin-bottom: 15px;
+            flex: 1;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .add-btn {
+            border: none;
+            background: var(--primary);
+            color: white;
+            padding: 11px 13px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: .2s;
+        }
+
+        .add-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* CARRINHO FLUTUANTE */
+        .cart-button {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 60;
+            border: none;
+            background: var(--dark);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(0,0,0,.25);
+        }
+
+        .cart-count {
+            background: var(--primary);
+            border-radius: 50%;
+            padding: 3px 7px;
+            margin-left: 5px;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.65);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            max-height: 92vh;
+            overflow-y: auto;
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 18px;
+            top: 15px;
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            background: #eee;
+            font-size: 20px;
+        }
+
+        .modal h2 {
+            padding-right: 40px;
+            margin-bottom: 8px;
+        }
+
+        .modal-price {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+            margin-top: 20px;
+        }
+
+        .form-section h3 {
+            margin-bottom: 10px;
+        }
+
+        .extra-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f7f7f7;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        .extra-option label {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .extra-price {
+            font-weight: bold;
+        }
+
+        .flavor-select,
+        .observation {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 5px;
+            outline: none;
+        }
+
+        .observation {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .quantity-control button {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #eee;
+            font-size: 20px;
+        }
+
+        .quantity-value {
+            font-weight: bold;
+            min-width: 25px;
+            text-align: center;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        /* CARRINHO */
+        .cart-item {
+            border-bottom: 1px solid var(--border);
+            padding: 15px 0;
+        }
+
+        .cart-item-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+        }
+
+        .cart-item-price {
+            font-weight: bold;
+        }
+
+        .cart-details {
+            margin-top: 8px;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .cart-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .cart-actions button {
+            border: none;
+            background: #eee;
+            border-radius: 7px;
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+
+        .remove-btn {
+            color: var(--primary);
+        }
+
+        .summary {
+            margin-top: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+        }
+
+        .summary-total {
+            border-top: 2px solid var(--dark);
+            margin-top: 8px;
+            padding-top: 12px;
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .checkout-form {
+            margin-top: 20px;
+        }
+
+        .checkout-form input,
+        .checkout-form select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            margin-top: 7px;
+            margin-bottom: 12px;
+        }
+
+        .whatsapp-btn {
+            width: 100%;
+            border: none;
+            background: var(--green);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: var(--gray);
+            padding: 35px 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 25px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-image {
+                height: 210px;
+            }
+
+            .modal {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
 <header>
-
-<div class="logo">
-
-<h1>
-Calculadora Profissional de Serralheria
-</h1>
-
-<p>
-Planejamento de materiais para fabricação metálica
-</p>
-
-</div>
-
+    <h1>🍔 BURG HOUSE</h1>
+    <p>Cardápio Oficial</p>
 </header>
 
-<main>
-
-<section class="card">
-
-<h2>
-Projeto
-</h2>
-
-<div class="grid-2">
-
-<div>
-
-<label>
-
-Tipo de Projeto
-
-</label>
-
-<select id="tipoProjeto">
-
-<option value="">Selecione...</option>
-
-<option value="portao">Portão</option>
-
-<option value="porta">Porta</option>
-
-<option value="grade">Grade</option>
-
-<option value="mesa">Mesa Industrial</option>
-
-<option value="armario">Armário Industrial</option>
-
-<option value="estante">Estante Industrial</option>
-
-</select>
-
-</div>
-
-<div>
-
-<label>
-
-Material do Esqueleto
-
-</label>
-
-<select id="materialEstrutura">
-
-</select>
-
-</div>
-
-</div>
-
-</section>
-
-<section
-id="camposProjeto"
-class="card">
-
-<!--
-Os campos aparecerão automaticamente
-conforme o projeto selecionado.
--->
-
-</section>
-
-<section class="card">
-
-<h2>
-
-Preenchimento
-
-</h2>
-
-<div id="areaPreenchimento">
-
-<div class="grid-2">
-
-<div>
-
-<label>
-
-Material
-
-</label>
-
-<select id="materialPreenchimento">
-
-</select>
-
-</div>
-
-<div>
-
-<label>
-
-Espaçamento permitido
-
-</label>
-
-<input
-type="text"
-value="8 cm até 12 cm"
-readonly>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="card">
-
-<h2>
-
-Botões
-
-</h2>
-
-<div class="botoes">
-
-<button
-id="btnCalcular">
-
-Calcular
-
-</button>
-
-<button
-id="btnLimpar">
-
-Limpar
-
-</button>
-
-<button
-id="btnLista">
-
-Lista de Corte
-
-</button>
-
-<button
-id="btnPDF">
-
-Exportar PDF
-
-</button>
-
-<button
-id="btnImprimir">
-
-Imprimir
-
-</button>
-
-</div>
-
-</section><!-- ===================================================== -->
-<!-- RESULTADOS -->
-<!-- ===================================================== -->
-
-<section class="card" id="painelResultados">
-
-    <h2>Resultado dos Cálculos</h2>
-
-    <div class="resultado-grid">
-
-        <div class="resultado-card">
-
-            <h3>Estrutura</h3>
-
-            <table class="tabelaResultado">
-
-                <tr>
-                    <td>Material</td>
-                    <td id="rEstruturaMaterial">-</td>
-                </tr>
-
-                <tr>
-                    <td>Metragem Total</td>
-                    <td id="rEstruturaMetros">0,00 m</td>
-                </tr>
-
-                <tr>
-                    <td>Barras de 6 m</td>
-                    <td id="rEstruturaBarras">0</td>
-                </tr>
-
-                <tr>
-                    <td>Sobra</td>
-                    <td id="rEstruturaSobra">0,00 m</td>
-                </tr>
-
-            </table>
-
-        </div>
-
-        <div class="resultado-card">
-
-            <h3>Preenchimento</h3>
-
-            <table class="tabelaResultado">
-
-                <tr>
-                    <td>Material</td>
-                    <td id="rPreenchimentoMaterial">-</td>
-                </tr>
-
-                <tr>
-                    <td>Quantidade de Peças</td>
-                    <td id="rPreenchimentoQuantidade">0</td>
-                </tr>
-
-                <tr>
-                    <td>Comprimento</td>
-                    <td id="rPreenchimentoComprimento">0,00 m</td>
-                </tr>
-
-                <tr>
-                    <td>Total de Metros</td>
-                    <td id="rPreenchimentoMetros">0,00 m</td>
-                </tr>
-
-                <tr>
-                    <td>Barras de 6 m</td>
-                    <td id="rPreenchimentoBarras">0</td>
-                </tr>
-
-                <tr>
-                    <td>Sobra</td>
-                    <td id="rPreenchimentoSobra">0,00 m</td>
-                </tr>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ===================================================== -->
-<!-- RESUMO GERAL -->
-<!-- ===================================================== -->
-
-<section class="card">
-
-    <h2>Resumo Geral</h2>
-
-    <table class="tabelaResumo">
-
-        <tr>
-
-            <th>Item</th>
-            <th>Resultado</th>
-
-        </tr>
-
-        <tr>
-
-            <td>Projeto</td>
-            <td id="resProjeto">-</td>
-
-        </tr>
-
-        <tr>
-
-            <td>Estrutura</td>
-            <td id="resEstrutura">0 barras</td>
-
-        </tr>
-
-        <tr>
-
-            <td>Preenchimento</td>
-            <td id="resPreenchimento">0 barras</td>
-
-        </tr>
-
-        <tr>
-
-            <td>Total Geral</td>
-            <td id="resTotal">0 barras</td>
-
-        </tr>
-
-    </table>
-
-</section>
-
-<!-- ===================================================== -->
-<!-- LISTA DE CORTE -->
-<!-- ===================================================== -->
-
-<section class="card">
-
-    <h2>Lista de Corte</h2>
-
-    <div class="listaContainer">
-
-        <table id="tabelaListaCorte">
-
-            <thead>
-
-                <tr>
-
-                    <th>Peça</th>
-                    <th>Perfil</th>
-                    <th>Quantidade</th>
-                    <th>Comprimento</th>
-                    <th>Total</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="listaCorteBody">
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</section>
-
-<!-- ===================================================== -->
-<!-- OBSERVAÇÕES -->
-<!-- ===================================================== -->
-
-<section class="card">
-
-    <h2>Observações</h2>
-
-    <textarea
-        id="observacoes"
-        rows="6"
-        placeholder="Observações do projeto..."></textarea>
-
-</section>
-
-<!-- ===================================================== -->
-<!-- RODAPÉ -->
-<!-- ===================================================== -->
-
-<footer>
-
-    <p>
-
-        Calculadora Profissional de Serralheria
-
-    </p>
-
-    <p>
-
-        Desenvolvido em HTML + CSS + JavaScript
-
-    </p>
-
-</footer>
+<main class="container">
+
+    <nav class="filters">
+        <button class="filter-btn active" data-category="todos">Todos</button>
+        <button class="filter-btn" data-category="hamburgueres">Hambúrgueres</button>
+        <button class="filter-btn" data-category="combos">Combos</button>
+        <button class="filter-btn" data-category="porcoes">Porções</button>
+        <button class="filter-btn" data-category="bebidas">Bebidas</button>
+    </nav>
+
+    <div id="products-container"></div>
 
 </main>
 
-</body>
-
-</html>/* =====================================================
-   CALCULADORA PROFISSIONAL DE SERRALHERIA
-   style.css
-===================================================== */
-
-:root{
-
-    --azul:#1565c0;
-    --azulEscuro:#0d47a1;
-    --cinza:#eceff1;
-    --cinza2:#cfd8dc;
-    --verde:#2e7d32;
-    --vermelho:#c62828;
-    --laranja:#ef6c00;
-    --texto:#263238;
-    --branco:#ffffff;
-    --sombra:0 10px 30px rgba(0,0,0,.10);
-
-    --radius:10px;
-
-}
-
-*{
-
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-
-}
-
-html{
-
-    scroll-behavior:smooth;
-
-}
-
-body{
-
-    background:#f5f7fa;
-
-    color:var(--texto);
-
-    font-family:Roboto,Arial,sans-serif;
-
-    min-height:100vh;
-
-}
-
-header{
-
-    background:linear-gradient(
-        135deg,
-        var(--azul),
-        var(--azulEscuro)
-    );
-
-    color:white;
-
-    padding:35px;
-
-    box-shadow:var(--sombra);
-
-}
-
-.logo{
-
-    max-width:1200px;
-
-    margin:auto;
-
-}
-
-.logo h1{
-
-    font-size:32px;
-
-    font-weight:700;
-
-}
-
-.logo p{
-
-    margin-top:8px;
-
-    opacity:.9;
-
-}
-
-main{
-
-    max-width:1200px;
-
-    margin:auto;
-
-    padding:30px;
-
-}
-
-.card{
-
-    background:white;
-
-    border-radius:var(--radius);
-
-    margin-bottom:25px;
-
-    padding:25px;
-
-    box-shadow:var(--sombra);
-
-}
-
-.card h2{
-
-    color:var(--azulEscuro);
-
-    margin-bottom:20px;
-
-}
-
-.grid-2{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-
-    gap:20px;
-
-}
-
-.grid-3{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-
-    gap:20px;
-
-}
-
-label{
-
-    display:block;
-
-    margin-bottom:8px;
-
-    font-weight:600;
-
-}
-
-input,
-select,
-textarea{
-
-    width:100%;
-
-    padding:12px;
-
-    border:1px solid #cfd8dc;
-
-    border-radius:8px;
-
-    font-size:15px;
-
-    outline:none;
-
-    transition:.25s;
-
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-
-    border-color:var(--azul);
-
-    box-shadow:0 0 0 3px rgba(21,101,192,.15);
-
-}
-
-textarea{
-
-    resize:vertical;
-
-}
-
-.botoes{
-
-    display:flex;
-
-    gap:15px;
-
-    flex-wrap:wrap;
-
-}
-
-button{
-
-    border:none;
-
-    padding:14px 24px;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    transition:.25s;
-
-}
-
-button:hover{
-
-    transform:translateY(-2px);
-
-}
-
-#btnCalcular{
-
-    background:var(--verde);
-
-    color:white;
-
-}
-
-#btnLimpar{
-
-    background:var(--vermelho);
-
-    color:white;
-
-}
-
-#btnLista{
-
-    background:var(--laranja);
-
-    color:white;
-
-}
-
-#btnPDF{
-
-    background:var(--azul);
-
-    color:white;
-
-}
-
-#btnImprimir{
-
-    background:#455a64;
-
-    color:white;
-
-}/* =====================================================
-   PAINEL DE RESULTADOS
-===================================================== */
-
-.resultado-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
-
-    gap:25px;
-
-    margin-top:20px;
-
-}
-
-.resultado-card{
-
-    background:#fafafa;
-
-    border:1px solid #e0e0e0;
-
-    border-left:6px solid var(--azul);
-
-    border-radius:10px;
-
-    padding:20px;
-
-    transition:.25s;
-
-}
-
-.resultado-card:hover{
-
-    transform:translateY(-3px);
-
-    box-shadow:var(--sombra);
-
-}
-
-.resultado-card h3{
-
-    color:var(--azulEscuro);
-
-    margin-bottom:15px;
-
-}
-
-/* =====================================================
-   TABELAS
-===================================================== */
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-}
-
-table th{
-
-    background:var(--azulEscuro);
-
-    color:white;
-
-    padding:12px;
-
-    text-align:left;
-
-}
-
-table td{
-
-    padding:12px;
-
-    border-bottom:1px solid #eceff1;
-
-}
-
-table tr:nth-child(even){
-
-    background:#fafafa;
-
-}
-
-table tr:hover{
-
-    background:#f1f8ff;
-
-}
-
-.tabelaResultado td:first-child{
-
-    font-weight:600;
-
-    width:55%;
-
-}
-
-.tabelaResumo{
-
-    margin-top:15px;
-
-}
-
-/* =====================================================
-   LISTA DE CORTE
-===================================================== */
-
-.listaContainer{
-
-    overflow-x:auto;
-
-}
-
-#tabelaListaCorte{
-
-    min-width:700px;
-
-}
-
-#listaCorteBody tr:hover{
-
-    background:#fff8e1;
-
-}
-
-/* =====================================================
-   FORMULÁRIOS
-===================================================== */
-
-input[readonly]{
-
-    background:#eceff1;
-
-    color:#455a64;
-
-    font-weight:bold;
-
-}
-
-input[type="number"]{
-
-    text-align:right;
-
-}
-
-select{
-
-    cursor:pointer;
-
-}
-
-/* =====================================================
-   ANIMAÇÕES
-===================================================== */
-
-.card{
-
-    animation:fadeCard .35s ease;
-
-}
-
-@keyframes fadeCard{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(20px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
-}
-
-/* =====================================================
-   BADGES
-===================================================== */
-
-.badge{
-
-    display:inline-block;
-
-    padding:5px 12px;
-
-    border-radius:20px;
-
-    font-size:13px;
-
-    font-weight:bold;
-
-}
-
-.badge-verde{
-
-    background:#e8f5e9;
-
-    color:#2e7d32;
-
-}
-
-.badge-vermelho{
-
-    background:#ffebee;
-
-    color:#c62828;
-
-}
-
-.badge-azul{
-
-    background:#e3f2fd;
-
-    color:#1565c0;
-
-}
-
-.badge-laranja{
-
-    background:#fff3e0;
-
-    color:#ef6c00;
-
-}
-
-/* =====================================================
-   RODAPÉ
-===================================================== */
-
-footer{
-
-    margin-top:40px;
-
-    text-align:center;
-
-    padding:25px;
-
-    color:#607d8b;
-
-    font-size:14px;
-
-}
-
-/* =====================================================
-   RESPONSIVIDADE
-===================================================== */
-
-@media(max-width:900px){
-
-    .grid-2,
-    .grid-3,
-    .resultado-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .botoes{
-
-        flex-direction:column;
-
-    }
-
-    button{
-
-        width:100%;
-
-    }
-
-    header{
-
-        text-align:center;
-
-    }
-
-    .logo h1{
-
-        font-size:26px;
-
-    }
-
-}
-
-@media(max-width:600px){
-
-    main{
-
-        padding:15px;
-
-    }
-
-    .card{
-
-        padding:18px;
-
-    }
-
-    table{
-
-        font-size:14px;
-
-    }
-
-}
-
-/* =====================================================
-   SCROLLBAR
-===================================================== */
-
-::-webkit-scrollbar{
-
-    width:10px;
-
-    height:10px;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:var(--azul);
-
-    border-radius:20px;
-
-}
-
-::-webkit-scrollbar-track{
-
-    background:#eceff1;
-
-}
-
-/* =====================================================
-   IMPRESSÃO
-===================================================== */
-
-@media print{
-
-    body{
-
-        background:white;
-
-    }
-
-    .botoes{
-
-        display:none;
-
-    }
-
-    header{
-
-        box-shadow:none;
-
-    }
-
-    .card{
-
-        box-shadow:none;
-
-        border:1px solid #ddd;
-
-        break-inside:avoid;
-
-    }
-
-    footer{
-
-        display:none;
-
-    }
-
-}/* =====================================================
-   CALCULADORA PROFISSIONAL DE SERRALHERIA
-
-   ARQUIVO:
-   materiais.js
-
-   Função:
-   Banco de dados dos materiais disponíveis
-
-===================================================== */
-
-
-const materiais = {
-
-
-    /* =================================================
-       MATERIAIS PARA ESTRUTURA
-    ================================================= */
-
-
-    estrutura: {
-
-
-        metalonQuadrado: [
-
-            "Metalon Quadrado 16x16",
-            "Metalon Quadrado 20x20",
-            "Metalon Quadrado 25x25",
-            "Metalon Quadrado 30x30",
-            "Metalon Quadrado 40x40",
-            "Metalon Quadrado 50x50"
-
-        ],
-
-
-        metalonRetangular: [
-
-            "Metalon Retangular 20x30",
-            "Metalon Retangular 20x40",
-            "Metalon Retangular 30x20",
-            "Metalon Retangular 30x40",
-            "Metalon Retangular 50x30",
-            "Metalon Retangular 50x50"
-
-        ],
-
-
-        cantoneiras: [
-
-            'Cantoneira 5/8" x 1/8"',
-            'Cantoneira 3/4" x 1/8"',
-            'Cantoneira 7/8" x 1/8"',
-            'Cantoneira 1" x 1/8"',
-            'Cantoneira 1" x 3/16"',
-            'Cantoneira 1.1/2" x 1/8"',
-            'Cantoneira 1.1/2" x 3/16"'
-
-        ]
-
-
-    },
-
-
-    /* =================================================
-       MATERIAIS PARA PREENCHIMENTO
-    ================================================= */
-
-
-    preenchimento: {
-
-
-        metalonQuadrado: [
-
-            "Metalon Quadrado 16x16",
-            "Metalon Quadrado 20x20",
-            "Metalon Quadrado 25x25",
-            "Metalon Quadrado 30x30",
-            "Metalon Quadrado 40x40",
-            "Metalon Quadrado 50x50"
-
-        ],
-
-
-        metalonRetangular: [
-
-            "Metalon Retangular 20x30",
-            "Metalon Retangular 20x40",
-            "Metalon Retangular 30x20",
-            "Metalon Retangular 30x40",
-            "Metalon Retangular 50x30",
-            "Metalon Retangular 50x50"
-
-        ],
-
-
-        vergalhoes: [
-
-            "Vergalhão 3/16",
-            "Vergalhão 1/4",
-            "Vergalhão 5/16",
-            "Vergalhão 3/8",
-            "Vergalhão 1/2",
-            "Vergalhão 5/8",
-            "Vergalhão 3/4",
-            "Vergalhão 1"
-
-        ]
-
-
-    },
-
-
-    /* =================================================
-       TIPOS DE PROJETOS
-    ================================================= */
-
-
-    projetos:{
-
-
-        portao:{
-
-            nome:"Portão",
-
-            preenchimento:true,
-
-            campos:[
-
-                "largura",
-                "altura"
-
-            ]
-
-        },
-
-
-        porta:{
-
-            nome:"Porta",
-
-            preenchimento:true,
-
-            campos:[
-
-                "largura",
-                "altura"
-
-            ]
-
-        },
-
-
-        grade:{
-
-            nome:"Grade",
-
-            preenchimento:true,
-
-            campos:[
-
-                "largura",
-                "altura"
-
-            ]
-
-        },
-
-
-        mesa:{
-
-            nome:"Mesa Industrial",
-
-            preenchimento:false,
-
-            campos:[
-
-                "largura",
-                "altura",
-                "profundidade"
-
-            ]
-
-        },
-
-
-        armario:{
-
-            nome:"Armário Industrial",
-
-            preenchimento:false,
-
-            campos:[
-
-                "largura",
-                "altura",
-                "profundidade",
-                "divisorHorizontal",
-                "divisorVertical"
-
-            ]
-
-        },
-
-
-        estante:{
-
-            nome:"Estante Industrial",
-
-            preenchimento:false,
-
-            campos:[
-
-                "largura",
-                "altura",
-                "profundidade",
-                "divisorHorizontal",
-                "divisorVertical"
-
-            ]
-
-        }
-
-
-    },
-
-
-    /* =================================================
-       CONFIGURAÇÕES DO SISTEMA
-    ================================================= */
-
-
-    configuracao:{
-
-
-        tamanhoBarra:6,
-
-
-        espacamentoMinimo:0.08,
-
-
-        espacamentoMaximo:0.12
-
-
-    }
-
-
-
-};
-
-
-/* =====================================================
-   FUNÇÕES AUXILIARES
-===================================================== */
-
-
-/*
-Retorna todos os materiais de estrutura
-*/
-
-function listarMateriaisEstrutura(){
-
-
-    let lista=[];
-
-
-    lista.push(...materiais.estrutura.metalonQuadrado);
-
-    lista.push(...materiais.estrutura.metalonRetangular);
-
-    lista.push(...materiais.estrutura.cantoneiras);
-
-
-    return lista;
-
-
-}
-
-
-
-/*
-Retorna todos os materiais de preenchimento
-*/
-
-function listarMateriaisPreenchimento(){
-
-
-    let lista=[];
-
-
-    lista.push(...materiais.preenchimento.metalonQuadrado);
-
-    lista.push(...materiais.preenchimento.metalonRetangular);
-
-    lista.push(...materiais.preenchimento.vergalhoes);
-
-
-    return lista;
-
-
-}
-
-
-
-/*
-Retorna dados do projeto escolhido
-*/
-
-function obterProjeto(tipo){
-
-
-    return materiais.projetos[tipo];
-
-
-}/* =====================================================
-   CALCULADORA PROFISSIONAL DE SERRALHERIA
-
-   ARQUIVO:
-   interface.js
-
-   Função:
-   Controle da interface do sistema
-
-===================================================== */
-
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-
-    carregarMateriais();
-
-
-    configurarEventos();
-
-
-});
-
-
-
-/* =====================================================
-   CARREGAMENTO DOS MATERIAIS
-===================================================== */
-
-
-function carregarMateriais(){
-
-
-    const estrutura =
-    document.getElementById("materialEstrutura");
-
-
-    const preenchimento =
-    document.getElementById("materialPreenchimento");
-
-
-
-    if(estrutura){
-
-
-        estrutura.innerHTML =
-        "<option value=''>Selecione...</option>";
-
-
-        listarMateriaisEstrutura()
-        .forEach(material=>{
-
-
-            let option =
-            document.createElement("option");
-
-
-            option.value = material;
-
-            option.textContent = material;
-
-
-            estrutura.appendChild(option);
-
-
-        });
-
-
-    }
-
-
-
-
-    if(preenchimento){
-
-
-        preenchimento.innerHTML =
-        "<option value=''>Selecione...</option>";
-
-
-        listarMateriaisPreenchimento()
-        .forEach(material=>{
-
-
-            let option =
-            document.createElement("option");
-
-
-            option.value = material;
-
-            option.textContent = material;
-
-
-            preenchimento.appendChild(option);
-
-
-        });
-
-
-    }
-
-
-}
-
-
-
-
-
-/* =====================================================
-   EVENTOS
-===================================================== */
-
-
-function configurarEventos(){
-
-
-
-    const projeto =
-    document.getElementById("tipoProjeto");
-
-
-
-    if(projeto){
-
-
-        projeto.addEventListener(
-            "change",
-            ()=>{
-
-
-                montarCamposProjeto(
-                    projeto.value
-                );
-
-
-            }
-        );
-
-
-    }
-
-
-
-    const limpar =
-    document.getElementById("btnLimpar");
-
-
-
-    if(limpar){
-
-
-        limpar.addEventListener(
-            "click",
-            limparFormulario
-        );
-
-
-    }
-
-
-
-}
-
-
-
-
-
-
-
-/* =====================================================
-   CRIAÇÃO DOS CAMPOS DO PROJETO
-===================================================== */
-
-
-function montarCamposProjeto(tipo){
-
-
-
-    const area =
-    document.getElementById("camposProjeto");
-
-
-    const preenchimento =
-    document.getElementById("areaPreenchimento");
-
-
-
-    area.innerHTML="";
-
-
-
-    if(!tipo){
-
-
-        area.innerHTML =
-        "<p>Selecione um tipo de projeto.</p>";
-
-
-        return;
-
-
-    }
-
-
-
-    let projeto =
-    obterProjeto(tipo);
-
-
-
-
-    let titulo =
-    document.createElement("h2");
-
-
-    titulo.textContent =
-    projeto.nome;
-
-
-
-    area.appendChild(titulo);
-
-
-
-
-
-    let div =
-    document.createElement("div");
-
-
-    div.className="grid-3";
-
-
-
-
-
-    projeto.campos.forEach(campo=>{
-
-
-        div.appendChild(
-            criarCampo(campo)
-        );
-
-
-    });
-
-
-
-    area.appendChild(div);
-
-
-
-
-
-    /*
-       Mostrar ou esconder preenchimento
-    */
-
-
-    if(projeto.preenchimento){
-
-
-        preenchimento.style.display="block";
-
-
-    }
-
-    else{
-
-
-        preenchimento.style.display="none";
-
-
-    }
-
-
-
-
-}
-
-
-
-
-
-/* =====================================================
-   CRIA CAMPOS INDIVIDUAIS
-===================================================== */
-
-
-function criarCampo(nome){
-
-
-
-    let bloco =
-    document.createElement("div");
-
-
-
-    let label =
-    document.createElement("label");
-
-
-
-    let input =
-    document.createElement("input");
-
-
-
-
-    input.type="number";
-
-    input.step="0.01";
-
-    input.min="0";
-
-
-
-    input.id =
-    nome;
-
-
-
-    switch(nome){
-
-
-
-        case "largura":
-
-            label.textContent=
-            "Largura (metros)";
-
-        break;
-
-
-
-
-        case "altura":
-
-            label.textContent=
-            "Altura (metros)";
-
-        break;
-
-
-
-
-        case "profundidade":
-
-            label.textContent=
-            "Profundidade (metros)";
-
-        break;
-
-
-
-
-        case "divisorHorizontal":
-
-            label.textContent=
-            "Divisores Horizontais";
-
-            input.step="1";
-
-        break;
-
-
-
-
-        case "divisorVertical":
-
-            label.textContent=
-            "Divisores Verticais";
-
-            input.step="1";
-
-        break;
-
-
-
-    }
-
-
-
-
-
-    bloco.appendChild(label);
-
-
-    bloco.appendChild(input);
-
-
-
-    return bloco;
-
-
-
-}
-
-
-
-
-
-
-
-
-/* =====================================================
-   LIMPAR FORMULÁRIO
-===================================================== */
-
-
-function limparFormulario(){
-
-
-
-    document
-    .querySelectorAll("input")
-    .forEach(input=>{
-
-
-        if(input.type!=="button"){
-
-
-            input.value="";
-
-
-        }
-
-
-    });
-
-
-
-    const projeto =
-    document.getElementById("tipoProjeto");
-
-
-    if(projeto){
-
-        projeto.value="";
-
-    }
-
-
-
-
-    document.getElementById(
-        "camposProjeto"
-    ).innerHTML =
-    "<p>Selecione um tipo de projeto.</p>";
-
-
-
-    limparResultados();
-
-
-}
-
-
-
-
-
-
-
-/* =====================================================
-   LIMPA RESULTADOS
-===================================================== */
-
-
-function limparResultados(){
-
-
-
-    const campos=[
-
-
-        "rEstruturaMaterial",
-        "rEstruturaMetros",
-        "rEstruturaBarras",
-        "rEstruturaSobra",
-
-
-        "rPreenchimentoMaterial",
-        "rPreenchimentoQuantidade",
-        "rPreenchimentoComprimento",
-        "rPreenchimentoMetros",
-        "rPreenchimentoBarras",
-        "rPreenchimentoSobra",
-
-
-        "resProjeto",
-        "resEstrutura",
-        "resPreenchimento",
-        "resTotal"
-
-
-    ];
-
-
-
-
-    campos.forEach(id=>{
-
-
-        let elemento =
-        document.getElementById(id);
-
-
-
-        if(elemento){
-
-
-            elemento.textContent="-";
-
-
-        }
-
-
-    });
-
-
-
-}/* =====================================================
-   CALCULADORA PROFISSIONAL DE SERRALHERIA
-
-   ARQUIVO:
-   calculos.js
-
-   Motor de cálculo
-
-===================================================== */
-
-
-document.addEventListener(
-"DOMContentLoaded",
-()=>{
-
-
-const botao =
-document.getElementById("btnCalcular");
-
-
-if(botao){
-
-
-botao.addEventListener(
-"click",
-calcularProjeto
-);
-
-
-}
-
-
-
-});
-
-
-
-
-/* =====================================================
-   FUNÇÃO PRINCIPAL
-===================================================== */
-
-
-function calcularProjeto(){
-
-
-let tipo =
-document.getElementById("tipoProjeto").value;
-
-
-
-if(!tipo){
-
-alert("Selecione um projeto.");
-
-return;
-
-}
-
-
-
-let dados =
-obterMedidas();
-
-
-
-let estrutura =
-calcularEstrutura(
-tipo,
-dados
-);
-
-
-
-let preenchimento =
-null;
-
-
-
-if(
-materiais.projetos[tipo].preenchimento
-){
-
-
-preenchimento =
-calcularPreenchimento(
-dados
-);
-
-
-}
-
-
-
-
-mostrarResultados(
-tipo,
-estrutura,
-preenchimento
-);
-
-
-
-}
-
-
-
-
-
-
-
-/* =====================================================
-   CAPTURA DAS MEDIDAS
-===================================================== */
-
-
-function obterMedidas(){
-
-
-return{
-
-
-largura:
-Number(
-document.getElementById("largura")?.value || 0
-),
-
-
-
-altura:
-Number(
-document.getElementById("altura")?.value || 0
-),
-
-
-
-profundidade:
-Number(
-document.getElementById("profundidade")?.value || 0
-),
-
-
-
-divisorHorizontal:
-Number(
-document.getElementById("divisorHorizontal")?.value || 0
-),
-
-
-
-divisorVertical:
-Number(
-document.getElementById("divisorVertical")?.value || 0
-)
-
-
-};
-
-
-}
-
-
-
-
-
-
-/* =====================================================
-   CÁLCULO DA ESTRUTURA
-===================================================== */
-
-
-function calcularEstrutura(tipo,d){
-
-
-let metros=0;
-
-
-
-switch(tipo){
-
-
-
-case "portao":
-
-case "porta":
-
-case "grade":
-
-
-metros =
-(
-2*d.largura
-+
-2*d.altura
-);
-
-
-break;
-
-
-
-
-case "mesa":
-
-
-metros =
-
-
-(
-4*d.altura
-)
-+
-(
-2*d.largura
-)
-+
-(
-2*d.profundidade
-)
-+
-(
-2*d.largura
-)
-+
-(
-2*d.profundidade
-);
-
-
-
-break;
-
-
-
-
-case "armario":
-
-case "estante":
-
-
-
-metros =
-
-
-(
-4*d.altura
-)
-+
-(
-4*d.largura
-)
-+
-(
-4*d.profundidade
-);
-
-
-
-// divisores horizontais
-
-
-metros +=
-(
-d.divisorHorizontal *
-(
-d.largura
-+
-2*d.profundidade
-)
-);
-
-
-
-// divisores verticais
-
-
-metros +=
-(
-d.divisorVertical *
-(
-d.altura
-+
-2*d.profundidade
-)
-);
-
-
-
-break;
-
-
-
-}
-
-
-
-return calcularBarras(metros);
-
-
-
-}
-
-
-
-
-
-
-
-
-/* =====================================================
-   PREENCHIMENTO
-===================================================== */
-
-
-function calcularPreenchimento(d){
-
-
-
-let espacamento =
-materiais.configuracao.espacamentoMaximo;
-
-
-
-let quantidade =
-Math.ceil(
-d.largura / espacamento
-);
-
-
-
-let espacoReal =
-d.largura /
-quantidade;
-
-
-
-if(
-espacoReal <
-materiais.configuracao.espacamentoMinimo
-){
-
-
-quantidade++;
-
-
-espacoReal =
-d.largura /
-quantidade;
-
-
-}
-
-
-
-
-let metros =
-quantidade *
-d.altura;
-
-
-
-
-return{
-
-
-quantidade,
-
-comprimento:d.altura,
-
-metros,
-
-...calcularBarras(metros)
-
-
-};
-
-
-
-}
-
-
-
-
-
-
-
-
-/* =====================================================
-   CONVERTE METROS EM BARRAS
-===================================================== */
-
-
-function calcularBarras(metros){
-
-
-
-let barras =
-Math.ceil(
-metros /
-materiais.configuracao.tamanhoBarra
-);
-
-
-
-let sobra =
-(
-barras *
-materiais.configuracao.tamanhoBarra
-)
--
-metros;
-
-
-
-return{
-
-
-metros,
-
-barras,
-
-sobra
-
-
-};
-
-
-
-}
-
-
-
-
-
-
-
-/* =====================================================
-   MOSTRAR RESULTADOS
-===================================================== */
-
-
-function mostrarResultados(
-tipo,
-estrutura,
-preenchimento
-){
-
-
-
-let materialEstrutura =
-document.getElementById(
-"materialEstrutura"
-).value;
-
-
-
-document.getElementById(
-"rEstruturaMaterial"
-).textContent =
-materialEstrutura;
-
-
-
-document.getElementById(
-"rEstruturaMetros"
-).textContent =
-estrutura.metros.toFixed(2)+" m";
-
-
-
-document.getElementById(
-"rEstruturaBarras"
-).textContent =
-estrutura.barras;
-
-
-
-document.getElementById(
-"rEstruturaSobra"
-).textContent =
-estrutura.sobra.toFixed(2)+" m";
-
-
-
-
-
-let total =
-estrutura.barras;
-
-
-
-if(preenchimento){
-
-
-
-let material =
-document.getElementById(
-"materialPreenchimento"
-).value;
-
-
-
-document.getElementById(
-"rPreenchimentoMaterial"
-).textContent =
-material;
-
-
-
-document.getElementById(
-"rPreenchimentoQuantidade"
-).textContent =
-preenchimento.quantidade;
-
-
-
-document.getElementById(
-"rPreenchimentoComprimento"
-).textContent =
-preenchimento.comprimento.toFixed(2)+" m";
-
-
-
-document.getElementById(
-"rPreenchimentoMetros"
-).textContent =
-preenchimento.metros.toFixed(2)+" m";
-
-
-
-document.getElementById(
-"rPreenchimentoBarras"
-).textContent =
-preenchimento.barras;
-
-
-
-document.getElementById(
-"rPreenchimentoSobra"
-).textContent =
-preenchimento.sobra.toFixed(2)+" m";
-
-
-
-total += preenchimento.barras;
-
-
-}
-
-
-
-
-
-document.getElementById(
-"resProjeto"
-).textContent =
-materiais.projetos[tipo].nome;
-
-
-
-document.getElementById(
-"resEstrutura"
-).textContent =
-estrutura.barras+" barras";
-
-
-
-document.getElementById(
-"resPreenchimento"
-).textContent =
-preenchimento ?
-preenchimento.barras+" barras"
-:
-"Não se aplica";
-
-
-
-document.getElementById(
-"resTotal"
-).textContent =
-total+" barras";
-
-
-
-}/* =====================================================
-   CALCULADORA PROFISSIONAL DE SERRALHERIA
-
-   lista-corte.js
-
-===================================================== */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const botao = document.getElementById("btnLista");
-
-    if(botao){
-
-        botao.addEventListener("click", gerarListaCorte);
-
-    }
-
-});
-
-
-
-function gerarListaCorte(){
-
-    const corpo =
-    document.getElementById("listaCorteBody");
-
-    if(!corpo) return;
-
-    corpo.innerHTML="";
-
-
-
-    const tipo =
-    document.getElementById("tipoProjeto").value;
-
-    if(!tipo){
-
-        alert("Selecione um projeto.");
-
-        return;
-
-    }
-
-
-
-    const material =
-    document.getElementById("materialEstrutura").value;
-
-
-
-    const largura =
-    Number(document.getElementById("largura")?.value||0);
-
-    const altura =
-    Number(document.getElementById("altura")?.value||0);
-
-    const profundidade =
-    Number(document.getElementById("profundidade")?.value||0);
-
-    const divH =
-    Number(document.getElementById("divisorHorizontal")?.value||0);
-
-    const divV =
-    Number(document.getElementById("divisorVertical")?.value||0);
-
-
-
-    adicionarLinha(
-        "Laterais",
-        material,
-        2,
-        altura
-    );
-
-
-
-    adicionarLinha(
-        "Superior",
-        material,
-        1,
-        largura
-    );
-
-
-
-    adicionarLinha(
-        "Inferior",
-        material,
-        1,
-        largura
-    );
-
-
-
-    if(tipo=="mesa"){
-
-        adicionarLinha(
-            "Profundidade Superior",
-            material,
-            2,
-            profundidade
-        );
-
-        adicionarLinha(
-            "Profundidade Inferior",
-            material,
-            2,
-            profundidade
-        );
-
-    }
-
-
-
-    if(tipo=="armario" || tipo=="estante"){
-
-        if(profundidade>0){
-
-            adicionarLinha(
-                "Profundidade",
-                material,
-                4,
-                profundidade
-            );
-
-        }
-
-
-
-        if(divH>0){
-
-            adicionarLinha(
-                "Divisores Horizontais",
-                material,
-                divH,
-                largura
-            );
-
-        }
-
-
-
-        if(divV>0){
-
-            adicionarLinha(
-                "Divisores Verticais",
-                material,
-                divV,
-                altura
-            );
-
-        }
-
-    }
-
-
-
-    if(
-        tipo=="portao" ||
-        tipo=="porta" ||
-        tipo=="grade"
-    ){
-
-        gerarPreenchimento();
-
-    }
-
-}
-
-
-
-
-
-function adicionarLinha(
-
-    descricao,
-
-    perfil,
-
-    quantidade,
-
-    comprimento
-
-){
-
-    const tabela =
-    document.getElementById("listaCorteBody");
-
-
-
-    let linha =
-    document.createElement("tr");
-
-
-
-    let total =
-    quantidade * comprimento;
-
-
-
-    linha.innerHTML=`
-
-        <td>${descricao}</td>
-
-        <td>${perfil}</td>
-
-        <td>${quantidade}</td>
-
-        <td>${comprimento.toFixed(2)} m</td>
-
-        <td>${total.toFixed(2)} m</td>
-
-    `;
-
-
-
-    tabela.appendChild(linha);
-
-}
-
-
-
-
-
-function gerarPreenchimento(){
-
-
-
-    const largura =
-    Number(document.getElementById("largura").value);
-
-    const altura =
-    Number(document.getElementById("altura").value);
-
-
-
-    const material =
-    document.getElementById("materialPreenchimento").value;
-
-
-
-    const espacamento = 0.10;
-
-
-
-    let quantidade =
-    Math.ceil(largura/espacamento);
-
-
-
-    adicionarLinha(
-
-        "Preenchimento",
-
-        material,
-
-        quantidade,
-
-        altura
-
-    );
-
-}/* =====================================================
-   CALCULADORA PROFISSIONAL DE SERRALHERIA
-   pdf.js
-===================================================== */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const btn = document.getElementById("btnPDF");
-
-    if(btn){
-
-        btn.addEventListener("click", exportarPDF);
-
-    }
-
-});
-
-
-function exportarPDF(){
-
-    abrirJanelaPDF();
-
-}
-
-
-
-function abrirJanelaPDF(){
-
-    const janela = window.open("", "_blank");
-
-    if(!janela){
-
-        alert("Permita pop-ups para gerar o PDF.");
-
-        return;
-
-    }
-
-    janela.document.write(`
-<!DOCTYPE html>
-<html lang="pt-BR">
-
-<head>
-
-<meta charset="UTF-8">
-
-<title>Relatório do Projeto</title>
-
-<style>
-
-body{
-
-    font-family:Arial,sans-serif;
-
-    margin:30px;
-
-    color:#222;
-
-}
-
-h1{
-
-    border-bottom:2px solid #000;
-
-    padding-bottom:10px;
-
-}
-
-h2{
-
-    margin-top:30px;
-
-}
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-    margin-top:10px;
-
-}
-
-th,td{
-
-    border:1px solid #000;
-
-    padding:8px;
-
-}
-
-th{
-
-    background:#efefef;
-
-}
-
-.info{
-
-    margin-top:10px;
-
-    line-height:1.8;
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-<h1>Calculadora Profissional de Serralheria</h1>
-
-<div class="info">
-
-<strong>Projeto:</strong>
-<span id="pdfProjeto"></span><br>
-
-<strong>Data:</strong>
-${new Date().toLocaleDateString()}
-
+<button class="cart-button" onclick="openCart()">
+    🛒 Carrinho
+    <span class="cart-count" id="cart-count">0</span>
+</button>
+
+<!-- MODAL DE PERSONALIZAÇÃO -->
+<div class="modal-overlay" id="product-modal">
+    <div class="modal">
+
+        <button class="close-modal" onclick="closeProductModal()">×</button>
+
+        <h2 id="modal-product-name"></h2>
+        <div class="modal-price" id="modal-product-price"></div>
+
+        <div id="hamburger-extras" class="form-section hidden">
+            <h3>Adicionais</h3>
+            <div id="extras-container"></div>
+        </div>
+
+        <div id="milkshake-flavor" class="form-section hidden">
+            <h3>Escolha o sabor *</h3>
+
+            <select id="flavor-select" class="flavor-select">
+                <option value="">Selecione o sabor</option>
+                <option value="Chocolate">Chocolate</option>
+                <option value="Morango">Morango</option>
+                <option value="Ovomaltine">Ovomaltine</option>
+            </select>
+        </div>
+
+        <div class="form-section">
+            <h3>Quantidade</h3>
+
+            <div class="quantity-control">
+                <button onclick="changeModalQuantity(-1)">−</button>
+                <span class="quantity-value" id="modal-quantity">1</span>
+                <button onclick="changeModalQuantity(1)">+</button>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Observação</h3>
+
+            <textarea
+                id="modal-observation"
+                class="observation"
+                placeholder="Ex: sem cebola, pouco molho, bem passado..."
+            ></textarea>
+        </div>
+
+        <button class="confirm-btn" onclick="addConfiguredProduct()">
+            Adicionar ao carrinho
+        </button>
+
+    </div>
 </div>
 
-<h2>Resumo</h2>
+<!-- MODAL DO CARRINHO -->
+<div class="modal-overlay" id="cart-modal">
+    <div class="modal">
 
-<table>
+        <button class="close-modal" onclick="closeCart()">×</button>
 
-<tr>
+        <h2>🛒 Seu Carrinho</h2>
 
-<th>Descrição</th>
+        <div id="cart-items"></div>
 
-<th>Resultado</th>
+        <div id="cart-summary"></div>
 
-</tr>
+        <div class="checkout-form">
 
-<tr>
+            <h3>Dados da entrega</h3>
 
-<td>Estrutura</td>
+            <label>
+                Nome
+                <input type="text" id="customer-name" placeholder="Seu nome">
+            </label>
 
-<td id="pdfEstrutura"></td>
+            <label>
+                Endereço
+                <input type="text" id="customer-address" placeholder="Rua, número">
+            </label>
 
-</tr>
+            <label>
+                Bairro
+                <input type="text" id="customer-neighborhood" placeholder="Bairro">
+            </label>
 
-<tr>
+            <label>
+                Complemento
+                <input type="text" id="customer-complement" placeholder="Casa, apartamento etc.">
+            </label>
 
-<td>Preenchimento</td>
+            <label>
+                Referência
+                <input type="text" id="customer-reference" placeholder="Próximo a...">
+            </label>
 
-<td id="pdfPreenchimento"></td>
+            <label>
+                Pagamento
+                <select id="payment-method">
+                    <option value="PIX">PIX</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Cartão de crédito">Cartão de crédito</option>
+                    <option value="Cartão de débito">Cartão de débito</option>
+                </select>
+            </label>
 
-</tr>
+            <label>
+                Cupom de desconto
+                <input
+                    type="text"
+                    id="coupon"
+                    placeholder="Digite seu cupom"
+                    oninput="updateCart()"
+                >
+            </label>
 
-<tr>
+            <button class="whatsapp-btn" onclick="sendWhatsAppOrder()">
+                📱 Finalizar pedido pelo WhatsApp
+            </button>
 
-<td>Total Geral</td>
+        </div>
 
-<td id="pdfTotal"></td>
-
-</tr>
-
-</table>
-
-<h2>Lista de Corte</h2>
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Peça</th>
-
-<th>Perfil</th>
-
-<th>Quantidade</th>
-
-<th>Comprimento</th>
-
-<th>Total</th>
-
-</tr>
-
-</thead>
-
-<tbody id="pdfLista"></tbody>
-
-</table>
+    </div>
+</div>
 
 <script>
+/* ============================================================
+   CONFIGURAÇÕES DA BURG HOUSE
+   Edite estas informações quando necessário.
+   ============================================================ */
 
-document.getElementById("pdfProjeto").innerHTML =
-window.opener.document.getElementById("resProjeto").innerHTML;
+const config = {
 
-document.getElementById("pdfEstrutura").innerHTML =
-window.opener.document.getElementById("resEstrutura").innerHTML;
+    // IMPORTANTE:
+    // Substitua pelo número do WhatsApp da BURG HOUSE.
+    // Formato: código do país + DDD + número.
+    whatsapp: "5511999999999",
 
-document.getElementById("pdfPreenchimento").innerHTML =
-window.opener.document.getElementById("resPreenchimento").innerHTML;
+    // Taxa padrão de entrega.
+    deliveryFee: 6.00,
 
-document.getElementById("pdfTotal").innerHTML =
-window.opener.document.getElementById("resTotal").innerHTML;
+    // Cupons.
+    // Para criar novos cupons, basta adicionar outro objeto.
+    coupons: {
+        "BURG5": 5.00,
+        "HOUSE10": 10.00
+    }
+};
 
-const origem =
-window.opener.document.querySelectorAll("#listaCorteBody tr");
 
-const destino =
-document.getElementById("pdfLista");
+/* ============================================================
+   PRODUTOS
+   ÚNICA FONTE DE DADOS DO CARDÁPIO
+   ============================================================ */
 
-origem.forEach(linha=>{
+const products = [
 
-    destino.appendChild(
-        linha.cloneNode(true)
-    );
+    // HAMBÚRGUERES
+    {
+        id: 1,
+        name: "Clássico House",
+        category: "hamburgueres",
+        price: 24.90,
+        description: "Pão brioche, hambúrguer artesanal 150g, queijo cheddar, alface, tomate e molho especial.",
+        image: "images/classico-house.jpg"
+    },
 
+    {
+        id: 2,
+        name: "Cheddar Bacon",
+        category: "hamburgueres",
+        price: 29.90,
+        description: "Pão brioche, hambúrguer 180g, cheddar cremoso, bacon crocante e molho barbecue.",
+        image: "images/cheddar-bacon.jpg"
+    },
+
+    {
+        id: 3,
+        name: "Brutus Bacon",
+        category: "hamburgueres",
+        price: 34.90,
+        description: "Pão brioche, hambúrguer 180g, cheddar, bacon em dobro, cebola caramelizada e molho da casa.",
+        image: "images/brutus-bacon.jpg"
+    },
+
+    {
+        id: 4,
+        name: "Chicken Crispy",
+        category: "hamburgueres",
+        price: 26.90,
+        description: "Pão brioche, filé de frango empanado, queijo prato, alface e maionese especial.",
+        image: "images/chicken-crispy.jpg"
+    },
+
+    {
+        id: 5,
+        name: "Duplo Smash",
+        category: "hamburgueres",
+        price: 31.90,
+        description: "Dois hambúrgueres smash 100g, queijo cheddar duplo, cebola grelhada e molho especial.",
+        image: "images/duplo-smash.jpg"
+    },
+
+    {
+        id: 6,
+        name: "Veggie Burger",
+        category: "hamburgueres",
+        price: 27.90,
+        description: "Hambúrguer vegetal, queijo, alface, tomate e molho verde.",
+        image: "images/veggie-burger.jpg"
+    },
+
+
+    // COMBOS
+    {
+        id: 7,
+        name: "Combo Clássico",
+        category: "combos",
+        price: 34.90,
+        description: "Clássico House + Batata Frita P + Refrigerante Lata.",
+        image: "images/combo-classico.jpg"
+    },
+
+    {
+        id: 8,
+        name: "Combo Cheddar",
+        category: "combos",
+        price: 39.90,
+        description: "Cheddar Bacon + Batata Frita M + Refrigerante Lata.",
+        image: "images/combo-cheddar.jpg"
+    },
+
+    {
+        id: 9,
+        name: "Combo Brutus",
+        category: "combos",
+        price: 49.90,
+        description: "Brutus Bacon + Batata Frita G + Refrigerante 600ml.",
+        image: "images/combo-brutus.jpg"
+    },
+
+    {
+        id: 10,
+        name: "Combo Chicken",
+        category: "combos",
+        price: 36.90,
+        description: "Chicken Crispy + Batata Frita P + Refrigerante Lata.",
+        image: "images/combo-chicken.jpg"
+    },
+
+    {
+        id: 11,
+        name: "Combo Família",
+        category: "combos",
+        price: 119.90,
+        description: "4 Hambúrgueres Clássicos + 2 Batatas G + Refrigerante 2L.",
+        image: "images/combo-familia.jpg"
+    },
+
+
+    // PORÇÕES
+    {
+        id: 12,
+        name: "Batata Frita P",
+        category: "porcoes",
+        price: 12.90,
+        description: "",
+        image: "images/batata-p.jpg"
+    },
+
+    {
+        id: 13,
+        name: "Batata Frita M",
+        category: "porcoes",
+        price: 17.90,
+        description: "",
+        image: "images/batata-m.jpg"
+    },
+
+    {
+        id: 14,
+        name: "Batata Frita G",
+        category: "porcoes",
+        price: 22.90,
+        description: "",
+        image: "images/batata-g.jpg"
+    },
+
+    {
+        id: 15,
+        name: "Batata Cheddar e Bacon",
+        category: "porcoes",
+        price: 29.90,
+        description: "",
+        image: "images/batata-cheddar-bacon.jpg"
+    },
+
+    {
+        id: 16,
+        name: "Onion Rings",
+        category: "porcoes",
+        price: 19.90,
+        description: "",
+        image: "images/onion-rings.jpg"
+    },
+
+    {
+        id: 17,
+        name: "Torresmo Crocante",
+        category: "porcoes",
+        price: 24.90,
+        description: "",
+        image: "images/torresmo.jpg"
+    },
+
+    {
+        id: 18,
+        name: "Frango Crocante — 10 unidades",
+        category: "porcoes",
+        price: 29.90,
+        description: "",
+        image: "images/frango-crocante.jpg"
+    },
+
+
+    // BEBIDAS
+    {
+        id: 19,
+        name: "Refrigerante Lata — 350ml",
+        category: "bebidas",
+        price: 6.00,
+        description: "",
+        image: "images/refrigerante-lata.jpg"
+    },
+
+    {
+        id: 20,
+        name: "Refrigerante 600ml",
+        category: "bebidas",
+        price: 9.00,
+        description: "",
+        image: "images/refrigerante-600.jpg"
+    },
+
+    {
+        id: 21,
+        name: "Refrigerante 2L",
+        category: "bebidas",
+        price: 14.00,
+        description: "",
+        image: "images/refrigerante-2l.jpg"
+    },
+
+    {
+        id: 22,
+        name: "Água Mineral",
+        category: "bebidas",
+        price: 4.00,
+        description: "",
+        image: "images/agua.jpg"
+    },
+
+    {
+        id: 23,
+        name: "Suco Natural",
+        category: "bebidas",
+        price: 8.00,
+        description: "",
+        image: "images/suco-natural.jpg"
+    },
+
+    {
+        id: 24,
+        name: "Milk-shake",
+        category: "bebidas",
+        price: 16.90,
+        description: "Opções de sabor: Chocolate, Morango e Ovomaltine.",
+        image: "images/milkshake.jpg"
+    }
+];
+
+
+/* ============================================================
+   ADICIONAIS
+   Valores facilmente editáveis.
+   ============================================================ */
+
+const extras = [
+    {
+        id: "bacon",
+        name: "Bacon extra",
+        price: 5.00
+    },
+
+    {
+        id: "cheddar",
+        name: "Cheddar extra",
+        price: 4.00
+    },
+
+    {
+        id: "hamburguer",
+        name: "Hambúrguer extra",
+        price: 8.00
+    },
+
+    {
+        id: "ovo",
+        name: "Ovo",
+        price: 3.00
+    },
+
+    {
+        id: "cebola",
+        name: "Cebola caramelizada",
+        price: 3.00
+    },
+
+    {
+        id: "molho",
+        name: "Molho extra",
+        price: 2.00
+    }
+];
+
+
+/* ============================================================
+   ESTADO DO APLICATIVO
+   ============================================================ */
+
+let cart = [];
+
+let selectedProduct = null;
+
+let modalQuantity = 1;
+
+
+/* ============================================================
+   UTILITÁRIOS
+   ============================================================ */
+
+function formatPrice(value) {
+    return value.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+}
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function categoryName(category) {
+    const names = {
+        hamburgueres: "🍔 HAMBÚRGUERES",
+        combos: "🍟 COMBOS",
+        porcoes: "🍟 PORÇÕES",
+        bebidas: "🥤 BEBIDAS"
+    };
+
+    return names[category] || category;
+}
+
+
+/* ============================================================
+   RENDERIZAÇÃO DOS PRODUTOS
+   ============================================================ */
+
+function renderProducts(category = "todos") {
+
+    const container = document.getElementById("products-container");
+
+    container.innerHTML = "";
+
+    const filteredProducts =
+        category === "todos"
+            ? products
+            : products.filter(product => product.category === category);
+
+    const categories = [
+        "hamburgueres",
+        "combos",
+        "porcoes",
+        "bebidas"
+    ];
+
+    categories.forEach(currentCategory => {
+
+        const categoryProducts = filteredProducts.filter(
+            product => product.category === currentCategory
+        );
+
+        if (categoryProducts.length === 0) {
+            return;
+        }
+
+        const section = document.createElement("section");
+
+        section.innerHTML = `
+            <h2 class="category-title">
+                ${categoryName(currentCategory)}
+            </h2>
+
+            <div class="products-grid">
+                ${categoryProducts.map(productCard).join("")}
+            </div>
+        `;
+
+        container.appendChild(section);
+    });
+}
+
+
+function productCard(product) {
+
+    const description = product.description
+        ? `<p class="product-description">${escapeHTML(product.description)}</p>`
+        : `<p class="product-description">&nbsp;</p>`;
+
+    return `
+        <article class="product-card">
+
+            <div class="product-image">
+                <img
+                    src="${escapeHTML(product.image)}"
+                    alt="${escapeHTML(product.name)}"
+                    onerror="this.style.display='none'; this.parentElement.innerHTML='🍔 Imagem do produto';"
+                >
+            </div>
+
+            <div class="product-content">
+
+                <h3>${escapeHTML(product.name)}</h3>
+
+                ${description}
+
+                <div class="product-bottom">
+
+                    <span class="price">
+                        ${formatPrice(product.price)}
+                    </span>
+
+                    <button
+                        class="add-btn"
+                        onclick="openProductModal(${product.id})"
+                    >
+                        Adicionar
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+    `;
+}
+
+
+/* ============================================================
+   FILTROS
+   ============================================================ */
+
+document.querySelectorAll(".filter-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document
+            .querySelectorAll(".filter-btn")
+            .forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+        renderProducts(button.dataset.category);
+    });
 });
 
-window.onload=function(){
 
-    window.print();
+/* ============================================================
+   MODAL DO PRODUTO
+   ============================================================ */
 
-};
+function openProductModal(productId) {
+
+    selectedProduct = products.find(
+        product => product.id === productId
+    );
+
+    if (!selectedProduct) return;
+
+    modalQuantity = 1;
+
+    document.getElementById("modal-product-name").textContent =
+        selectedProduct.name;
+
+    document.getElementById("modal-product-price").textContent =
+        formatPrice(selectedProduct.price);
+
+    document.getElementById("modal-quantity").textContent =
+        modalQuantity;
+
+    document.getElementById("modal-observation").value = "";
+
+    document.getElementById("flavor-select").value = "";
+
+    /* Adicionais */
+    const extrasSection = document.getElementById("hamburger-extras");
+
+    if (selectedProduct.category === "hamburgueres") {
+
+        extrasSection.classList.remove("hidden");
+
+        document.getElementById("extras-container").innerHTML =
+            extras.map(extra => `
+                <div class="extra-option">
+
+                    <label>
+                        <input
+                            type="checkbox"
+                            value="${escapeHTML(extra.id)}"
+                            data-name="${escapeHTML(extra.name)}"
+                            data-price="${extra.price}"
+                        >
+                        ${escapeHTML(extra.name)}
+                    </label>
+
+                    <span class="extra-price">
+                        + ${formatPrice(extra.price)}
+                    </span>
+
+                </div>
+            `).join("");
+
+    } else {
+
+        extrasSection.classList.add("hidden");
+
+        document.getElementById("extras-container").innerHTML = "";
+    }
+
+
+    /* Milk-shake */
+    const flavorSection = document.getElementById("milkshake-flavor");
+
+    if (selectedProduct.name === "Milk-shake") {
+        flavorSection.classList.remove("hidden");
+    } else {
+        flavorSection.classList.add("hidden");
+    }
+
+
+    document.getElementById("product-modal")
+        .classList.add("show");
+}
+
+
+function closeProductModal() {
+
+    document.getElementById("product-modal")
+        .classList.remove("show");
+
+    selectedProduct = null;
+}
+
+
+function changeModalQuantity(amount) {
+
+    modalQuantity += amount;
+
+    if (modalQuantity < 1) {
+        modalQuantity = 1;
+    }
+
+    document.getElementById("modal-quantity").textContent =
+        modalQuantity;
+}
+
+
+/* ============================================================
+   ADICIONAR PRODUTO CONFIGURADO AO CARRINHO
+   ============================================================ */
+
+function addConfiguredProduct() {
+
+    if (!selectedProduct) return;
+
+
+    /* Verifica sabor do Milk-shake */
+
+    let flavor = "";
+
+    if (selectedProduct.name === "Milk-shake") {
+
+        flavor = document.getElementById("flavor-select").value;
+
+        if (!flavor) {
+            alert("Selecione o sabor do Milk-shake.");
+            return;
+        }
+    }
+
+
+    /* Adicionais */
+
+    let selectedExtras = [];
+
+    if (selectedProduct.category === "hamburgueres") {
+
+        document
+            .querySelectorAll("#extras-container input:checked")
+            .forEach(input => {
+
+                selectedExtras.push({
+                    id: input.value,
+                    name: input.dataset.name,
+                    price: Number(input.dataset.price)
+                });
+
+            });
+    }
+
+
+    const observation =
+        document.getElementById("modal-observation").value.trim();
+
+
+    /* Preço unitário */
+
+    const extrasTotal = selectedExtras.reduce(
+        (sum, extra) => sum + extra.price,
+        0
+    );
+
+    const unitPrice =
+        selectedProduct.price + extrasTotal;
+
+
+    /* Item */
+
+    const cartItem = {
+
+        cartId:
+            Date.now() +
+            Math.random().toString(36).substring(2),
+
+        productId: selectedProduct.id,
+
+        name: selectedProduct.name,
+
+        basePrice: selectedProduct.price,
+
+        unitPrice: unitPrice,
+
+        quantity: modalQuantity,
+
+        flavor: flavor,
+
+        extras: selectedExtras,
+
+        observation: observation
+    };
+
+
+    cart.push(cartItem);
+
+    updateCartCount();
+
+    closeProductModal();
+
+    alert("Produto adicionado ao carrinho!");
+}
+
+
+/* ============================================================
+   CARRINHO
+   ============================================================ */
+
+function updateCartCount() {
+
+    const count = cart.reduce(
+        (total, item) => total + item.quantity,
+        0
+    );
+
+    document.getElementById("cart-count").textContent = count;
+}
+
+
+function openCart() {
+
+    updateCart();
+
+    document
+        .getElementById("cart-modal")
+        .classList.add("show");
+}
+
+
+function closeCart() {
+
+    document
+        .getElementById("cart-modal")
+        .classList.remove("show");
+}
+
+
+function calculateSubtotal() {
+
+    return cart.reduce(
+        (total, item) =>
+            total + (item.unitPrice * item.quantity),
+        0
+    );
+}
+
+
+function getCouponDiscount() {
+
+    const coupon =
+        document
+            .getElementById("coupon")
+            .value
+            .trim()
+            .toUpperCase();
+
+    if (!coupon) {
+        return 0;
+    }
+
+    return config.coupons[coupon] || 0;
+}
+
+
+function updateCart() {
+
+    const container =
+        document.getElementById("cart-items");
+
+    if (cart.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-cart">
+                Seu carrinho está vazio.
+            </div>
+        `;
+
+    } else {
+
+        container.innerHTML = cart
+            .map(renderCartItem)
+            .join("");
+    }
+
+
+    const subtotal = calculateSubtotal();
+
+    const delivery =
+        cart.length > 0
+            ? config.deliveryFee
+            : 0;
+
+    const discount =
+        Math.min(getCouponDiscount(), subtotal);
+
+    const total =
+        subtotal +
+        delivery -
+        discount;
+
+
+    document.getElementById("cart-summary").innerHTML = `
+
+        <div class="summary">
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <strong>${formatPrice(subtotal)}</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Entrega</span>
+                <strong>${formatPrice(delivery)}</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Desconto</span>
+                <strong>- ${formatPrice(discount)}</strong>
+            </div>
+
+            <div class="summary-row summary-total">
+                <span>Total</span>
+                <strong>${formatPrice(total)}</strong>
+            </div>
+
+        </div>
+    `;
+}
+
+
+function renderCartItem(item) {
+
+    const extrasHTML = item.extras.length
+        ? `
+            <strong>Adicionais:</strong>
+            <ul>
+                ${item.extras.map(extra =>
+                    `<li>${escapeHTML(extra.name)} — ${formatPrice(extra.price)}</li>`
+                ).join("")}
+            </ul>
+        `
+        : "";
+
+
+    const flavorHTML = item.flavor
+        ? `<div><strong>Sabor:</strong> ${escapeHTML(item.flavor)}</div>`
+        : "";
+
+
+    const observationHTML = item.observation
+        ? `<div><strong>Observação:</strong> ${escapeHTML(item.observation)}</div>`
+        : "";
+
+
+    const subtotalItem =
+        item.unitPrice * item.quantity;
+
+
+    return `
+
+        <div class="cart-item">
+
+            <div class="cart-item-header">
+
+                <div class="cart-item-name">
+                    ${escapeHTML(item.name)}
+                </div>
+
+                <div class="cart-item-price">
+                    ${formatPrice(subtotalItem)}
+                </div>
+
+            </div>
+
+            <div class="cart-details">
+
+                <div>
+                    ${item.quantity}x —
+                    ${formatPrice(item.unitPrice)}
+                </div>
+
+                ${flavorHTML}
+
+                ${extrasHTML}
+
+                ${observationHTML}
+
+                <div style="margin-top:8px;">
+                    <strong>Subtotal do item:</strong>
+                    ${formatPrice(subtotalItem)}
+                </div>
+
+            </div>
+
+            <div class="cart-actions">
+
+                <button onclick="changeCartQuantity('${item.cartId}', -1)">
+                    −
+                </button>
+
+                <strong>${item.quantity}</strong>
+
+                <button onclick="changeCartQuantity('${item.cartId}', 1)">
+                    +
+                </button>
+
+                <button
+                    class="remove-btn"
+                    onclick="removeCartItem('${item.cartId}')"
+                >
+                    Remover
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
+function changeCartQuantity(cartId, amount) {
+
+    const item = cart.find(
+        item => item.cartId === cartId
+    );
+
+    if (!item) return;
+
+    item.quantity += amount;
+
+    if (item.quantity <= 0) {
+        cart = cart.filter(
+            item => item.cartId !== cartId
+        );
+    }
+
+    updateCartCount();
+
+    updateCart();
+}
+
+
+function removeCartItem(cartId) {
+
+    cart = cart.filter(
+        item => item.cartId !== cartId
+    );
+
+    updateCartCount();
+
+    updateCart();
+}
+
+
+/* ============================================================
+   WHATSAPP
+   ============================================================ */
+
+function sendWhatsAppOrder() {
+
+    if (cart.length === 0) {
+        alert("Adicione produtos ao carrinho antes de finalizar.");
+        return;
+    }
+
+
+    const name =
+        document.getElementById("customer-name")
+            .value.trim();
+
+    const address =
+        document.getElementById("customer-address")
+            .value.trim();
+
+    const neighborhood =
+        document.getElementById("customer-neighborhood")
+            .value.trim();
+
+    const complement =
+        document.getElementById("customer-complement")
+            .value.trim();
+
+    const reference =
+        document.getElementById("customer-reference")
+            .value.trim();
+
+    const payment =
+        document.getElementById("payment-method")
+            .value;
+
+
+    if (!name || !address || !neighborhood) {
+
+        alert(
+            "Preencha pelo menos Nome, Endereço e Bairro."
+        );
+
+        return;
+    }
+
+
+    const subtotal = calculateSubtotal();
+
+    const delivery = config.deliveryFee;
+
+    const discount =
+        Math.min(getCouponDiscount(), subtotal);
+
+    const total =
+        subtotal +
+        delivery -
+        discount;
+
+
+    let message =
+`🍔 *BURG HOUSE — NOVO PEDIDO*
+
+👤 Cliente: ${name}
+
+📦 *ITENS DO PEDIDO*
+
+`;
+
+
+    cart.forEach(item => {
+
+        message +=
+`${item.quantity}x ${item.name}`;
+
+        if (item.flavor) {
+            message += ` — ${item.flavor}`;
+        }
+
+        message +=
+` — ${formatPrice(item.unitPrice * item.quantity)}
+`;
+
+
+        item.extras.forEach(extra => {
+
+            message +=
+`- ${extra.name} — ${formatPrice(extra.price * item.quantity)}
+`;
+
+        });
+
+
+        if (item.observation) {
+
+            message +=
+`  Obs.: ${item.observation}
+`;
+        }
+
+
+        message += "\n";
+    });
+
+
+    message +=
+`💰 Subtotal: ${formatPrice(subtotal)}
+🚚 Entrega: ${formatPrice(delivery)}
+💸 Desconto: ${formatPrice(discount)}
+💵 *Total: ${formatPrice(total)}*
+
+📍 *ENTREGA*
+
+${address}
+Bairro ${neighborhood}
+Complemento: ${complement || "Não informado"}
+Referência: ${reference || "Não informada"}
+
+💳 *PAGAMENTO*
+${payment}`;
+
+
+    const encodedMessage =
+        encodeURIComponent(message);
+
+    const whatsappURL =
+        `https://wa.me/${config.whatsapp}?text=${encodedMessage}`;
+
+
+    window.open(
+        whatsappURL,
+        "_blank"
+    );
+}
+
+
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+
+renderProducts();
+
+updateCartCount();
 
 </script>
 
 </body>
-
 </html>
-`);
-
-    janela.document.close();
-
-}/* =====================================================
-   APP.JS
-===================================================== */
-
-document.addEventListener("DOMContentLoaded", iniciarSistema);
-
-function iniciarSistema(){
-
-    console.log("Calculadora Profissional de Serralheria");
-
-    registrarServiceWorker();
-
-    mostrarData();
-
-}
-
-function mostrarData(){
-
-    let rodape = document.querySelector("footer p");
-
-    if(!rodape) return;
-
-    let hoje = new Date();
-
-    rodape.innerHTML +=
-    "<br>Versão 1.0 - "+
-    hoje.toLocaleDateString("pt-BR");
-
-}
-
-function registrarServiceWorker(){
-
-    if("serviceWorker" in navigator){
-
-        navigator.serviceWorker.register("sw.js")
-        .then(()=>{
-
-            console.log("Service Worker registrado.");
-
-        })
-        .catch(()=>{
-
-            console.log("Falha ao registrar.");
-
-        });
-
-    }
-
-}{
-    "name":"Calculadora Profissional de Serralheria",
-
-    "short_name":"Serralheria",
-
-    "start_url":"./",
-
-    "display":"standalone",
-
-    "background_color":"#1565c0",
-
-    "theme_color":"#1565c0",
-
-    "orientation":"portrait",
-
-    "icons":[
-        {
-            "src":"img/icon-192.png",
-            "sizes":"192x192",
-            "type":"image/png"
-        },
-        {
-            "src":"img/icon-512.png",
-            "sizes":"512x512",
-            "type":"image/png"
-        }
-    ]
-}const CACHE="serralheria-v1";
-
-const arquivos=[
-
-"/",
-
-"/index.html",
-
-"/css/style.css",
-
-"/js/app.js",
-
-"/js/interface.js",
-
-"/js/calculos.js",
-
-"/js/lista-corte.js",
-
-"/js/pdf.js",
-
-"/js/materiais.js"
-
-];
-
-self.addEventListener("install",evento=>{
-
-evento.waitUntil(
-
-caches.open(CACHE)
-
-.then(cache=>cache.addAll(arquivos))
-
-);
-
-});
-
-self.addEventListener("fetch",evento=>{
-
-evento.respondWith(
-
-caches.match(evento.request)
-
-.then(resposta=>{
-
-return resposta || fetch(evento.request);
-
-})
-
-);
-
-});body{
-
-background:white;
-
-}
-
-header{
-
-box-shadow:none;
-
-}
-
-button{
-
-display:none;
-
-}
-
-.botoes{
-
-display:none;
-
-}
-
-.card{
-
-box-shadow:none;
-
-border:1px solid #999;
-
-margin-bottom:15px;
-
-}
-
-footer{
-
-display:none;
-
-}
-
-table{
-
-font-size:12px;
-
-}
-
-@page{
-
-margin:1cm;
-
-}Calculadora-Serralheria/
-
-index.html
-
-manifest.json
-
-sw.js
-
-css/
-    style.css
-    print.css
-
-js/
-    app.js
-    materiais.js
-    interface.js
-    calculos.js
-    lista-corte.js
-    pdf.js
+```
