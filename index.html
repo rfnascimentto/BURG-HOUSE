@@ -1,651 +1,826 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BURG HOUSE — Cardápio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<title>Burg House | Delivery</title>
 
-        :root {
-            --primary: #e63946;
-            --primary-dark: #c92f3b;
-            --dark: #171717;
-            --dark-2: #242424;
-            --light: #f7f7f7;
-            --white: #ffffff;
-            --gray: #777;
-            --border: #e5e5e5;
-            --green: #25d366;
-        }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: var(--light);
-            color: var(--dark);
-        }
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        button,
-        input,
-        textarea,
-        select {
-            font: inherit;
-        }
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #111;
+    color: #fff;
+}
 
-        header {
-            background: var(--dark);
-            color: white;
-            padding: 25px 20px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            box-shadow: 0 3px 15px rgba(0,0,0,.15);
-        }
+header {
+    background: #0b0b0b;
+    padding: 18px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #333;
+}
 
-        header h1 {
-            font-size: 30px;
-            font-weight: 900;
-            letter-spacing: 1px;
-        }
+.logo {
+    font-size: 28px;
+    font-weight: 900;
+}
 
-        header p {
-            color: #ddd;
-            margin-top: 5px;
-        }
+.logo span {
+    color: #e50914;
+}
 
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 25px 18px 120px;
-        }
+header p {
+    color: #aaa;
+    margin-top: 5px;
+    font-size: 14px;
+}
 
-        /* FILTROS */
-        .filters {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px 15px 120px;
+}
 
-        .filter-btn {
-            border: none;
-            background: white;
-            border: 1px solid var(--border);
-            padding: 11px 18px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: .2s;
-        }
+/* CATEGORIAS */
 
-        .filter-btn:hover,
-        .filter-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
+.categories {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 5px 0 18px;
+}
 
-        /* CATEGORIA */
-        .category-title {
-            margin: 30px 0 15px;
-            font-size: 25px;
-        }
+.categories button {
+    border: 0;
+    background: #292929;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 30px;
+    white-space: nowrap;
+    cursor: pointer;
+}
 
-        /* PRODUTOS */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 18px;
-        }
+.categories button.active,
+.categories button:hover {
+    background: #e50914;
+}
 
-        .product-card {
-            background: white;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0,0,0,.07);
-            display: flex;
-            flex-direction: column;
-            transition: transform .2s, box-shadow .2s;
-        }
+/* PRODUTOS */
 
-        .product-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,.11);
-        }
+.products {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
 
-        .product-image {
-            width: 100%;
-            height: 190px;
-            background: linear-gradient(135deg, #ddd, #f3f3f3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 15px;
-            overflow: hidden;
-        }
+.product {
+    background: #1c1c1c;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #292929;
+}
 
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+.product-image {
+    height: 150px;
+    background: linear-gradient(135deg, #2a2a2a, #111);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 55px;
+}
 
-        .product-content {
-            padding: 17px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
+.product-content {
+    padding: 15px;
+}
 
-        .product-content h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
+.product h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
 
-        .product-description {
-            color: var(--gray);
-            line-height: 1.45;
-            font-size: 14px;
-            margin-bottom: 15px;
-            flex: 1;
-        }
+.product p {
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.4;
+    min-height: 55px;
+}
 
-        .product-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
+.price {
+    font-size: 19px;
+    font-weight: bold;
+    color: #f5c400;
+    margin: 12px 0;
+}
 
-        .price {
-            font-size: 20px;
-            font-weight: 900;
-        }
+.add {
+    width: 100%;
+    border: 0;
+    background: #e50914;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        .add-btn {
-            border: none;
-            background: var(--primary);
-            color: white;
-            padding: 11px 13px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: .2s;
-        }
+/* CARRINHO */
 
-        .add-btn:hover {
-            background: var(--primary-dark);
-        }
+.cart {
+    margin-top: 25px;
+    background: #1c1c1c;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #333;
+}
 
-        /* CARRINHO FLUTUANTE */
-        .cart-button {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            z-index: 60;
-            border: none;
-            background: var(--dark);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 6px 20px rgba(0,0,0,.25);
-        }
+.cart h2 {
+    margin-bottom: 15px;
+}
 
-        .cart-count {
-            background: var(--primary);
-            border-radius: 50%;
-            padding: 3px 7px;
-            margin-left: 5px;
-        }
+.cart-item {
+    border-bottom: 1px solid #333;
+    padding: 12px 0;
+}
 
-        /* MODAL */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.65);
-            z-index: 100;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-        }
+.cart-item-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
 
-        .modal-overlay.show {
-            display: flex;
-        }
+.cart-item small {
+    color: #aaa;
+}
 
-        .modal {
-            background: white;
-            width: 100%;
-            max-width: 600px;
-            max-height: 92vh;
-            overflow-y: auto;
-            border-radius: 20px;
-            padding: 25px;
-            position: relative;
-        }
+.qty {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+}
 
-        .close-modal {
-            position: absolute;
-            right: 18px;
-            top: 15px;
-            width: 35px;
-            height: 35px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            background: #eee;
-            font-size: 20px;
-        }
+.qty button {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+}
 
-        .modal h2 {
-            padding-right: 40px;
-            margin-bottom: 8px;
-        }
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    font-size: 20px;
+}
 
-        .modal-price {
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
+.cart-total strong {
+    color: #f5c400;
+}
 
-        .form-section {
-            margin-top: 20px;
-        }
+/* FORMULÁRIO */
 
-        .form-section h3 {
-            margin-bottom: 10px;
-        }
+.checkout {
+    margin-top: 20px;
+    background: #1c1c1c;
+    padding: 20px;
+    border-radius: 15px;
+}
 
-        .extra-option {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px;
-            background: #f7f7f7;
-            border-radius: 10px;
-            margin-bottom: 8px;
-        }
+.checkout h2 {
+    margin-bottom: 15px;
+}
 
-        .extra-option label {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            cursor: pointer;
-        }
+label {
+    display: block;
+    color: #bbb;
+    margin: 13px 0 6px;
+}
 
-        .extra-price {
-            font-weight: bold;
-        }
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 13px;
+    background: #111;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+}
 
-        .flavor-select,
-        .observation {
-            width: 100%;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px;
-            margin-top: 5px;
-            outline: none;
-        }
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
 
-        .observation {
-            min-height: 90px;
-            resize: vertical;
-        }
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #e50914;
+}
 
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 15px;
-        }
+/* PAGAMENTO */
 
-        .quantity-control button {
-            width: 35px;
-            height: 35px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            background: #eee;
-            font-size: 20px;
-        }
+.payment-options {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+}
 
-        .quantity-value {
-            font-weight: bold;
-            min-width: 25px;
-            text-align: center;
-        }
+.payment-option {
+    background: #111;
+    border: 1px solid #444;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+}
 
-        .confirm-btn {
-            width: 100%;
-            border: none;
-            background: var(--primary);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
-        }
+.payment-option input {
+    width: auto;
+    margin-right: 8px;
+}
 
-        /* CARRINHO */
-        .cart-item {
-            border-bottom: 1px solid var(--border);
-            padding: 15px 0;
-        }
+.payment-option strong {
+    display: block;
+    margin-bottom: 4px;
+}
 
-        .cart-item-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
+.payment-option small {
+    color: #999;
+}
 
-        .cart-item-name {
-            font-weight: bold;
-        }
+/* PIX */
 
-        .cart-item-price {
-            font-weight: bold;
-        }
+.pix-box {
+    display: none;
+    background: #101010;
+    padding: 18px;
+    margin-top: 15px;
+    border-radius: 12px;
+    border: 1px solid #00a859;
+    text-align: center;
+}
 
-        .cart-details {
-            margin-top: 8px;
-            color: #555;
-            font-size: 14px;
-            line-height: 1.6;
-        }
+.pix-box.show {
+    display: block;
+}
 
-        .cart-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
+.pix-owner {
+    margin-bottom: 15px;
+    color: #bbb;
+}
 
-        .cart-actions button {
-            border: none;
-            background: #eee;
-            border-radius: 7px;
-            padding: 6px 10px;
-            cursor: pointer;
-        }
+.pix-owner strong {
+    display: block;
+    color: #fff;
+    margin-top: 5px;
+}
 
-        .remove-btn {
-            color: var(--primary);
-        }
+.pix-value {
+    font-size: 24px;
+    color: #00d26a;
+    font-weight: bold;
+    margin: 15px 0;
+}
 
-        .summary {
-            margin-top: 20px;
-        }
+#qrcode {
+    width: 230px;
+    height: 230px;
+    background: white;
+    padding: 10px;
+    margin: 15px auto;
+    border-radius: 10px;
+}
 
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 7px 0;
-        }
+#pixCode {
+    width: 100%;
+    height: 90px;
+    resize: none;
+    font-size: 11px;
+    margin-top: 10px;
+}
 
-        .summary-total {
-            border-top: 2px solid var(--dark);
-            margin-top: 8px;
-            padding-top: 12px;
-            font-size: 22px;
-            font-weight: 900;
-        }
+.copy-button {
+    width: 100%;
+    background: #f5c400;
+    border: 0;
+    padding: 13px;
+    margin-top: 8px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        .checkout-form {
-            margin-top: 20px;
-        }
+/* DINHEIRO */
 
-        .checkout-form input,
-        .checkout-form select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            margin-top: 7px;
-            margin-bottom: 12px;
-        }
+.money-box {
+    display: none;
+    margin-top: 12px;
+    padding: 15px;
+    background: #111;
+    border-radius: 10px;
+}
 
-        .whatsapp-btn {
-            width: 100%;
-            border: none;
-            background: var(--green);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-        }
+.money-box.show {
+    display: block;
+}
 
-        .empty-cart {
-            text-align: center;
-            color: var(--gray);
-            padding: 35px 10px;
-        }
+/* CARTÃO */
 
-        .hidden {
-            display: none !important;
-        }
+.card-box {
+    display: none;
+    margin-top: 12px;
+    padding: 15px;
+    background: #111;
+    border-radius: 10px;
+    border: 1px solid #555;
+}
 
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 25px;
-            }
+.card-box.show {
+    display: block;
+}
 
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
+.card-box strong {
+    color: #f5c400;
+}
 
-            .product-image {
-                height: 210px;
-            }
+/* BOTÃO */
 
-            .modal {
-                padding: 20px;
-            }
-        }
-    </style>
+.finish {
+    width: 100%;
+    border: 0;
+    background: #25d366;
+    color: white;
+    padding: 17px;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.finish:hover {
+    opacity: .9;
+}
+
+/* BARRA DO CARRINHO */
+
+.cart-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #e50914;
+    padding: 13px 20px;
+    z-index: 200;
+}
+
+.cart-bar button {
+    width: 100%;
+    max-width: 900px;
+    display: block;
+    margin: auto;
+    border: 0;
+    background: transparent;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 600px) {
+
+    .products {
+        grid-template-columns: 1fr;
+    }
+
+    .product-image {
+        height: 170px;
+    }
+
+}
+
+@media (min-width: 601px) {
+
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+</style>
 </head>
 
 <body>
 
 <header>
-    <h1>🍔 BURG HOUSE</h1>
-    <p>Cardápio Oficial</p>
+
+    <div class="logo">
+        🍔 BURG <span>HOUSE</span>
+    </div>
+
+    <p>Seu burger favorito, do nosso jeito!</p>
+
 </header>
 
-<main class="container">
 
-    <nav class="filters">
-        <button class="filter-btn active" data-category="todos">Todos</button>
-        <button class="filter-btn" data-category="hamburgueres">Hambúrgueres</button>
-        <button class="filter-btn" data-category="combos">Combos</button>
-        <button class="filter-btn" data-category="porcoes">Porções</button>
-        <button class="filter-btn" data-category="bebidas">Bebidas</button>
-    </nav>
+<div class="container">
 
-    <div id="products-container"></div>
+    <!-- CATEGORIAS -->
 
-</main>
+    <div class="categories">
 
-<button class="cart-button" onclick="openCart()">
-    🛒 Carrinho
-    <span class="cart-count" id="cart-count">0</span>
-</button>
+        <button class="active" onclick="filterProducts('todos', this)">
+            Todos
+        </button>
 
-<!-- MODAL DE PERSONALIZAÇÃO -->
-<div class="modal-overlay" id="product-modal">
-    <div class="modal">
+        <button onclick="filterProducts('hamburgueres', this)">
+            🍔 Hambúrgueres
+        </button>
 
-        <button class="close-modal" onclick="closeProductModal()">×</button>
+        <button onclick="filterProducts('combos', this)">
+            🍔 Combos
+        </button>
 
-        <h2 id="modal-product-name"></h2>
-        <div class="modal-price" id="modal-product-price"></div>
+        <button onclick="filterProducts('porcoes', this)">
+            🍟 Porções
+        </button>
 
-        <div id="hamburger-extras" class="form-section hidden">
-            <h3>Adicionais</h3>
-            <div id="extras-container"></div>
-        </div>
-
-        <div id="milkshake-flavor" class="form-section hidden">
-            <h3>Escolha o sabor *</h3>
-
-            <select id="flavor-select" class="flavor-select">
-                <option value="">Selecione o sabor</option>
-                <option value="Chocolate">Chocolate</option>
-                <option value="Morango">Morango</option>
-                <option value="Ovomaltine">Ovomaltine</option>
-            </select>
-        </div>
-
-        <div class="form-section">
-            <h3>Quantidade</h3>
-
-            <div class="quantity-control">
-                <button onclick="changeModalQuantity(-1)">−</button>
-                <span class="quantity-value" id="modal-quantity">1</span>
-                <button onclick="changeModalQuantity(1)">+</button>
-            </div>
-        </div>
-
-        <div class="form-section">
-            <h3>Observação</h3>
-
-            <textarea
-                id="modal-observation"
-                class="observation"
-                placeholder="Ex: sem cebola, pouco molho, bem passado..."
-            ></textarea>
-        </div>
-
-        <button class="confirm-btn" onclick="addConfiguredProduct()">
-            Adicionar ao carrinho
+        <button onclick="filterProducts('bebidas', this)">
+            🥤 Bebidas
         </button>
 
     </div>
-</div>
 
-<!-- MODAL DO CARRINHO -->
-<div class="modal-overlay" id="cart-modal">
-    <div class="modal">
 
-        <button class="close-modal" onclick="closeCart()">×</button>
+    <!-- PRODUTOS -->
 
-        <h2>🛒 Seu Carrinho</h2>
+    <div id="products" class="products"></div>
 
-        <div id="cart-items"></div>
 
-        <div id="cart-summary"></div>
+    <!-- CARRINHO -->
 
-        <div class="checkout-form">
+    <section class="cart" id="cart">
 
-            <h3>Dados da entrega</h3>
+        <h2>🛒 Seu pedido</h2>
 
-            <label>
-                Nome
-                <input type="text" id="customer-name" placeholder="Seu nome">
-            </label>
+        <div id="cartItems">
+            <p style="color:#999;">
+                Seu carrinho está vazio.
+            </p>
+        </div>
 
-            <label>
-                Endereço
-                <input type="text" id="customer-address" placeholder="Rua, número">
-            </label>
+        <div class="cart-total">
 
-            <label>
-                Bairro
-                <input type="text" id="customer-neighborhood" placeholder="Bairro">
-            </label>
+            <span>Total</span>
 
-            <label>
-                Complemento
-                <input type="text" id="customer-complement" placeholder="Casa, apartamento etc.">
-            </label>
-
-            <label>
-                Referência
-                <input type="text" id="customer-reference" placeholder="Próximo a...">
-            </label>
-
-            <label>
-                Pagamento
-                <select id="payment-method">
-                    <option value="PIX">PIX</option>
-                    <option value="Dinheiro">Dinheiro</option>
-                    <option value="Cartão de crédito">Cartão de crédito</option>
-                    <option value="Cartão de débito">Cartão de débito</option>
-                </select>
-            </label>
-
-            <label>
-                Cupom de desconto
-                <input
-                    type="text"
-                    id="coupon"
-                    placeholder="Digite seu cupom"
-                    oninput="updateCart()"
-                >
-            </label>
-
-            <button class="whatsapp-btn" onclick="sendWhatsAppOrder()">
-                📱 Finalizar pedido pelo WhatsApp
-            </button>
+            <strong id="cartTotal">
+                R$ 0,00
+            </strong>
 
         </div>
 
-    </div>
+    </section>
+
+
+    <!-- FINALIZAÇÃO -->
+
+    <section class="checkout">
+
+        <h2>📦 Dados da entrega</h2>
+
+
+        <label>Nome *</label>
+
+        <input
+            type="text"
+            id="customerName"
+            placeholder="Seu nome"
+        >
+
+
+        <label>WhatsApp *</label>
+
+        <input
+            type="tel"
+            id="customerPhone"
+            placeholder="(11) 99999-9999"
+        >
+
+
+        <label>Endereço *</label>
+
+        <input
+            type="text"
+            id="address"
+            placeholder="Rua e número"
+        >
+
+
+        <label>Bairro *</label>
+
+        <input
+            type="text"
+            id="neighborhood"
+            placeholder="Seu bairro"
+        >
+
+
+        <label>Complemento</label>
+
+        <input
+            type="text"
+            id="complement"
+            placeholder="Casa, apartamento..."
+        >
+
+
+        <label>Ponto de referência</label>
+
+        <input
+            type="text"
+            id="reference"
+            placeholder="Próximo de..."
+        >
+
+
+        <label>Observação do pedido</label>
+
+        <textarea
+            id="orderObservation"
+            placeholder="Alguma observação?"
+        ></textarea>
+
+
+        <!-- PAGAMENTO -->
+
+        <h2 style="margin-top:25px;">
+            💳 Forma de pagamento
+        </h2>
+
+
+        <div class="payment-options">
+
+            <label class="payment-option">
+
+                <input
+                    type="radio"
+                    name="payment"
+                    value="pix"
+                    onchange="changePayment()"
+                >
+
+                <strong>⚡ PIX</strong>
+
+                <small>
+                    Pague pelo QR Code ou PIX Copia e Cola.
+                </small>
+
+            </label>
+
+
+            <label class="payment-option">
+
+                <input
+                    type="radio"
+                    name="payment"
+                    value="dinheiro"
+                    onchange="changePayment()"
+                >
+
+                <strong>💵 Dinheiro</strong>
+
+                <small>
+                    Pagamento em espécie ao entregador.
+                </small>
+
+            </label>
+
+
+            <label class="payment-option">
+
+                <input
+                    type="radio"
+                    name="payment"
+                    value="cartao"
+                    onchange="changePayment()"
+                >
+
+                <strong>💳 Cartão</strong>
+
+                <small>
+                    O entregador levará a máquina de cartão.
+                </small>
+
+            </label>
+
+        </div>
+
+
+        <!-- PIX -->
+
+        <div id="pixBox" class="pix-box">
+
+            <h3>⚡ Pagamento via PIX</h3>
+
+            <div class="pix-owner">
+
+                Titular da chave PIX:
+
+                <strong>
+                    R F NASCIMENTO
+                </strong>
+
+            </div>
+
+
+            <div class="pix-value" id="pixValue">
+                R$ 0,00
+            </div>
+
+
+            <p style="color:#aaa;">
+                Escaneie o QR Code pelo aplicativo do seu banco.
+            </p>
+
+
+            <div id="qrcode"></div>
+
+
+            <p style="color:#aaa;">
+                Ou utilize o PIX Copia e Cola:
+            </p>
+
+
+            <textarea
+                id="pixCode"
+                readonly
+            ></textarea>
+
+
+            <button
+                class="copy-button"
+                onclick="copyPix()"
+            >
+                📋 COPIAR PIX
+            </button>
+
+
+            <p
+                id="copyMessage"
+                style="
+                    color:#00d26a;
+                    margin-top:10px;
+                "
+            ></p>
+
+        </div>
+
+
+        <!-- DINHEIRO -->
+
+        <div id="moneyBox" class="money-box">
+
+            <strong>💵 Pagamento em dinheiro</strong>
+
+            <label>
+                Troco para quanto?
+            </label>
+
+            <input
+                type="number"
+                id="changeFor"
+                step="0.01"
+                placeholder="Ex: 100.00"
+            >
+
+            <small style="
+                display:block;
+                color:#888;
+                margin-top:8px;
+            ">
+                Se não precisar de troco, deixe vazio.
+            </small>
+
+        </div>
+
+
+        <!-- CARTÃO -->
+
+        <div id="cardBox" class="card-box">
+
+            <strong>
+                💳 Pagamento com cartão
+            </strong>
+
+            <p style="
+                color:#aaa;
+                margin-top:8px;
+                line-height:1.5;
+            ">
+                Você poderá pagar com cartão de débito ou
+                crédito. A máquina de cartão será levada pelo
+                entregador no momento da entrega.
+            </p>
+
+        </div>
+
+
+        <button
+            class="finish"
+            onclick="finishOrder()"
+        >
+            📲 FINALIZAR PEDIDO PELO WHATSAPP
+        </button>
+
+    </section>
+
 </div>
 
+
+<!-- BARRA DO CARRINHO -->
+
+<div class="cart-bar">
+
+    <button onclick="scrollToCart()">
+
+        🛒
+        <span id="barItems">0</span>
+        itens —
+        <span id="barTotal">R$ 0,00</span>
+
+        • VER PEDIDO
+
+    </button>
+
+</div>
+
+
 <script>
-/* ============================================================
+
+/* =========================================================
    CONFIGURAÇÕES DA BURG HOUSE
-   Edite estas informações quando necessário.
-   ============================================================ */
-
-const config = {
-
-    // IMPORTANTE:
-    // Substitua pelo número do WhatsApp da BURG HOUSE.
-    // Formato: código do país + DDD + número.
-    whatsapp: "5597984488708",
-
-    // Taxa padrão de entrega.
-    deliveryFee: 0.00,
-
-    // Cupons.
-    // Para criar novos cupons, basta adicionar outro objeto.
-    coupons: {
-        "BURG5": 5.00,
-        "HOUSE10": 10.00
-    }
-};
+========================================================= */
 
 
-/* ============================================================
+/*
+   COLOQUE AQUI O NÚMERO REAL DO WHATSAPP.
+
+   Formato:
+   55 + DDD + número
+
+   Exemplo:
+   5511999999999
+*/
+
+const WHATSAPP_NUMBER = "COLOQUE_SEU_WHATSAPP_AQUI";
+
+
+/*
+   CHAVE PIX DA BURG HOUSE
+*/
+
+const PIX_KEY =
+    "22217af1-a87a-4ee7-9c7b-61890915530a";
+
+
+/*
+   TITULAR DA CHAVE
+*/
+
+const PIX_OWNER =
+    "R F NASCIMENTO";
+
+
+*
+/* =========================================================
    PRODUTOS
-   ÚNICA FONTE DE DADOS DO CARDÁPIO
-   ============================================================ */
+========================================================= */
 
 const products = [
 
-    // HAMBÚRGUERES
     {
         id: 1,
         name: "Clássico House",
         category: "hamburgueres",
         price: 24.90,
-        description: "Pão brioche, hambúrguer artesanal 150g, queijo cheddar, alface, tomate e molho especial.",
-        image: "images/classico-house.jpg"
+        emoji: "🍔",
+        description:
+            "Pão brioche, hambúrguer artesanal 150g, queijo cheddar, alface, tomate e molho especial."
     },
 
     {
@@ -653,8 +828,9 @@ const products = [
         name: "Cheddar Bacon",
         category: "hamburgueres",
         price: 29.90,
-        description: "Pão brioche, hambúrguer 180g, cheddar cremoso, bacon crocante e molho barbecue.",
-        image: "images/cheddar-bacon.jpg"
+        emoji: "🧀",
+        description:
+            "Pão brioche, hambúrguer 180g, cheddar cremoso, bacon crocante e molho barbecue."
     },
 
     {
@@ -662,8 +838,9 @@ const products = [
         name: "Brutus Bacon",
         category: "hamburgueres",
         price: 34.90,
-        description: "Pão brioche, hambúrguer 180g, cheddar, bacon em dobro, cebola caramelizada e molho da casa.",
-        image: "images/brutus-bacon.jpg"
+        emoji: "🔥",
+        description:
+            "Pão brioche, hambúrguer 180g, cheddar, bacon em dobro, cebola caramelizada e molho da casa."
     },
 
     {
@@ -671,8 +848,9 @@ const products = [
         name: "Chicken Crispy",
         category: "hamburgueres",
         price: 26.90,
-        description: "Pão brioche, filé de frango empanado, queijo prato, alface e maionese especial.",
-        image: "images/chicken-crispy.jpg"
+        emoji: "🐔",
+        description:
+            "Pão brioche, filé de frango empanado, queijo prato, alface e maionese especial."
     },
 
     {
@@ -680,8 +858,9 @@ const products = [
         name: "Duplo Smash",
         category: "hamburgueres",
         price: 31.90,
-        description: "Dois hambúrgueres smash 100g, queijo cheddar duplo, cebola grelhada e molho especial.",
-        image: "images/duplo-smash.jpg"
+        emoji: "🍔",
+        description:
+            "Dois hambúrgueres smash 100g, queijo cheddar duplo, cebola grelhada e molho especial."
     },
 
     {
@@ -689,19 +868,22 @@ const products = [
         name: "Veggie Burger",
         category: "hamburgueres",
         price: 27.90,
-        description: "Hambúrguer vegetal, queijo, alface, tomate e molho verde.",
-        image: "images/veggie-burger.jpg"
+        emoji: "🌱",
+        description:
+            "Hambúrguer vegetal, queijo, alface, tomate e molho verde."
     },
 
 
-    // COMBOS
+    /* COMBOS */
+
     {
         id: 7,
         name: "Combo Clássico",
         category: "combos",
         price: 34.90,
-        description: "Clássico House + Batata Frita P + Refrigerante Lata.",
-        image: "images/combo-classico.jpg"
+        emoji: "🍔",
+        description:
+            "Clássico House + Batata Frita P + Refrigerante Lata."
     },
 
     {
@@ -709,8 +891,9 @@ const products = [
         name: "Combo Cheddar",
         category: "combos",
         price: 39.90,
-        description: "Cheddar Bacon + Batata Frita M + Refrigerante Lata.",
-        image: "images/combo-cheddar.jpg"
+        emoji: "🧀",
+        description:
+            "Cheddar Bacon + Batata Frita M + Refrigerante Lata."
     },
 
     {
@@ -718,8 +901,9 @@ const products = [
         name: "Combo Brutus",
         category: "combos",
         price: 49.90,
-        description: "Brutus Bacon + Batata Frita G + Refrigerante 600ml.",
-        image: "images/combo-brutus.jpg"
+        emoji: "🔥",
+        description:
+            "Brutus Bacon + Batata Frita G + Refrigerante 600ml."
     },
 
     {
@@ -727,8 +911,9 @@ const products = [
         name: "Combo Chicken",
         category: "combos",
         price: 36.90,
-        description: "Chicken Crispy + Batata Frita P + Refrigerante Lata.",
-        image: "images/combo-chicken.jpg"
+        emoji: "🐔",
+        description:
+            "Chicken Crispy + Batata Frita P + Refrigerante Lata."
     },
 
     {
@@ -736,19 +921,21 @@ const products = [
         name: "Combo Família",
         category: "combos",
         price: 119.90,
-        description: "4 Hambúrgueres Clássicos + 2 Batatas G + Refrigerante 2L.",
-        image: "images/combo-familia.jpg"
+        emoji: "👨‍👩‍👧‍👦",
+        description:
+            "4 Hambúrgueres Clássicos + 2 Batatas G + Refrigerante 2L."
     },
 
 
-    // PORÇÕES
+    /* PORÇÕES */
+
     {
         id: 12,
         name: "Batata Frita P",
         category: "porcoes",
         price: 12.90,
-        description: "",
-        image: "images/batata-p.jpg"
+        emoji: "🍟",
+        description: "Batata frita tamanho pequeno."
     },
 
     {
@@ -756,8 +943,8 @@ const products = [
         name: "Batata Frita M",
         category: "porcoes",
         price: 17.90,
-        description: "",
-        image: "images/batata-m.jpg"
+        emoji: "🍟",
+        description: "Batata frita tamanho médio."
     },
 
     {
@@ -765,8 +952,8 @@ const products = [
         name: "Batata Frita G",
         category: "porcoes",
         price: 22.90,
-        description: "",
-        image: "images/batata-g.jpg"
+        emoji: "🍟",
+        description: "Batata frita tamanho grande."
     },
 
     {
@@ -774,8 +961,8 @@ const products = [
         name: "Batata Cheddar e Bacon",
         category: "porcoes",
         price: 29.90,
-        description: "",
-        image: "images/batata-cheddar-bacon.jpg"
+        emoji: "🧀",
+        description: "Batata frita com cheddar e bacon."
     },
 
     {
@@ -783,8 +970,8 @@ const products = [
         name: "Onion Rings",
         category: "porcoes",
         price: 19.90,
-        description: "",
-        image: "images/onion-rings.jpg"
+        emoji: "🧅",
+        description: "Anéis de cebola crocantes."
     },
 
     {
@@ -792,28 +979,29 @@ const products = [
         name: "Torresmo Crocante",
         category: "porcoes",
         price: 24.90,
-        description: "",
-        image: "images/torresmo.jpg"
+        emoji: "🥓",
+        description: "Torresmo crocante."
     },
 
     {
         id: 18,
-        name: "Frango Crocante — 10 unidades",
+        name: "Frango Crocante",
         category: "porcoes",
         price: 29.90,
-        description: "",
-        image: "images/frango-crocante.jpg"
+        emoji: "🍗",
+        description: "10 unidades de frango crocante."
     },
 
 
-    // BEBIDAS
+    /* BEBIDAS */
+
     {
         id: 19,
-        name: "Refrigerante Lata — 350ml",
+        name: "Refrigerante Lata 350ml",
         category: "bebidas",
         price: 6.00,
-        description: "",
-        image: "images/refrigerante-lata.jpg"
+        emoji: "🥤",
+        description: "Refrigerante lata 350ml."
     },
 
     {
@@ -821,839 +1009,7 @@ const products = [
         name: "Refrigerante 600ml",
         category: "bebidas",
         price: 9.00,
-        description: "",
-        image: "images/refrigerante-600.jpg"
+        emoji: "🥤",
+        description: "Refrigerante 600ml."
     },
-
-    {
-        id: 21,
-        name: "Refrigerante 2L",
-        category: "bebidas",
-        price: 14.00,
-        description: "",
-        image: "images/refrigerante-2l.jpg"
-    },
-
-    {
-        id: 22,
-        name: "Água Mineral",
-        category: "bebidas",
-        price: 4.00,
-        description: "",
-        image: "images/agua.jpg"
-    },
-
-    {
-        id: 23,
-        name: "Suco Natural",
-        category: "bebidas",
-        price: 8.00,
-        description: "",
-        image: "images/suco-natural.jpg"
-    },
-
-    {
-        id: 24,
-        name: "Milk-shake",
-        category: "bebidas",
-        price: 16.90,
-        description: "Opções de sabor: Chocolate, Morango e Ovomaltine.",
-        image: "images/milkshake.jpg"
-    }
-];
-
-
-/* ============================================================
-   ADICIONAIS
-   Valores facilmente editáveis.
-   ============================================================ */
-
-const extras = [
-    {
-        id: "bacon",
-        name: "Bacon extra",
-        price: 3.00
-    },
-
-    {
-        id: "cheddar",
-        name: "Cheddar extra",
-        price: 2.00
-    },
-
-    {
-        id: "hamburguer",
-        name: "Hambúrguer extra",
-        price: 6.00
-    },
-
-    {
-        id: "ovo",
-        name: "Ovo",
-        price: 3.00
-    },
-
-    {
-        id: "cebola",
-        name: "Cebola caramelizada",
-        price: 1.00
-    },
-
-    {
-        id: "molho",
-        name: "Molho extra",
-        price: 1.00
-    }
-];
-
-
-/* ============================================================
-   ESTADO DO APLICATIVO
-   ============================================================ */
-
-let cart = [];
-
-let selectedProduct = null;
-
-let modalQuantity = 1;
-
-
-/* ============================================================
-   UTILITÁRIOS
-   ============================================================ */
-
-function formatPrice(value) {
-    return value.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-    });
-}
-
-function escapeHTML(value) {
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-function categoryName(category) {
-    const names = {
-        hamburgueres: "🍔 HAMBÚRGUERES",
-        combos: "🍟 COMBOS",
-        porcoes: "🍟 PORÇÕES",
-        bebidas: "🥤 BEBIDAS"
-    };
-
-    return names[category] || category;
-}
-
-
-/* ============================================================
-   RENDERIZAÇÃO DOS PRODUTOS
-   ============================================================ */
-
-function renderProducts(category = "todos") {
-
-    const container = document.getElementById("products-container");
-
-    container.innerHTML = "";
-
-    const filteredProducts =
-        category === "todos"
-            ? products
-            : products.filter(product => product.category === category);
-
-    const categories = [
-        "hamburgueres",
-        "combos",
-        "porcoes",
-        "bebidas"
-    ];
-
-    categories.forEach(currentCategory => {
-
-        const categoryProducts = filteredProducts.filter(
-            product => product.category === currentCategory
-        );
-
-        if (categoryProducts.length === 0) {
-            return;
-        }
-
-        const section = document.createElement("section");
-
-        section.innerHTML = `
-            <h2 class="category-title">
-                ${categoryName(currentCategory)}
-            </h2>
-
-            <div class="products-grid">
-                ${categoryProducts.map(productCard).join("")}
-            </div>
-        `;
-
-        container.appendChild(section);
-    });
-}
-
-
-function productCard(product) {
-
-    const description = product.description
-        ? `<p class="product-description">${escapeHTML(product.description)}</p>`
-        : `<p class="product-description">&nbsp;</p>`;
-
-    return `
-        <article class="product-card">
-
-            <div class="product-image">
-                <img
-                    src="${escapeHTML(product.image)}"
-                    alt="${escapeHTML(product.name)}"
-                    onerror="this.style.display='none'; this.parentElement.innerHTML='🍔 Imagem do produto';"
-                >
-            </div>
-
-            <div class="product-content">
-
-                <h3>${escapeHTML(product.name)}</h3>
-
-                ${description}
-
-                <div class="product-bottom">
-
-                    <span class="price">
-                        ${formatPrice(product.price)}
-                    </span>
-
-                    <button
-                        class="add-btn"
-                        onclick="openProductModal(${product.id})"
-                    >
-                        Adicionar
-                    </button>
-
-                </div>
-
-            </div>
-
-        </article>
-    `;
-}
-
-
-/* ============================================================
-   FILTROS
-   ============================================================ */
-
-document.querySelectorAll(".filter-btn").forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        document
-            .querySelectorAll(".filter-btn")
-            .forEach(btn => btn.classList.remove("active"));
-
-        button.classList.add("active");
-
-        renderProducts(button.dataset.category);
-    });
-});
-
-
-/* ============================================================
-   MODAL DO PRODUTO
-   ============================================================ */
-
-function openProductModal(productId) {
-
-    selectedProduct = products.find(
-        product => product.id === productId
-    );
-
-    if (!selectedProduct) return;
-
-    modalQuantity = 1;
-
-    document.getElementById("modal-product-name").textContent =
-        selectedProduct.name;
-
-    document.getElementById("modal-product-price").textContent =
-        formatPrice(selectedProduct.price);
-
-    document.getElementById("modal-quantity").textContent =
-        modalQuantity;
-
-    document.getElementById("modal-observation").value = "";
-
-    document.getElementById("flavor-select").value = "";
-
-    /* Adicionais */
-    const extrasSection = document.getElementById("hamburger-extras");
-
-    if (selectedProduct.category === "hamburgueres") {
-
-        extrasSection.classList.remove("hidden");
-
-        document.getElementById("extras-container").innerHTML =
-            extras.map(extra => `
-                <div class="extra-option">
-
-                    <label>
-                        <input
-                            type="checkbox"
-                            value="${escapeHTML(extra.id)}"
-                            data-name="${escapeHTML(extra.name)}"
-                            data-price="${extra.price}"
-                        >
-                        ${escapeHTML(extra.name)}
-                    </label>
-
-                    <span class="extra-price">
-                        + ${formatPrice(extra.price)}
-                    </span>
-
-                </div>
-            `).join("");
-
-    } else {
-
-        extrasSection.classList.add("hidden");
-
-        document.getElementById("extras-container").innerHTML = "";
-    }
-
-
-    /* Milk-shake */
-    const flavorSection = document.getElementById("milkshake-flavor");
-
-    if (selectedProduct.name === "Milk-shake") {
-        flavorSection.classList.remove("hidden");
-    } else {
-        flavorSection.classList.add("hidden");
-    }
-
-
-    document.getElementById("product-modal")
-        .classList.add("show");
-}
-
-
-function closeProductModal() {
-
-    document.getElementById("product-modal")
-        .classList.remove("show");
-
-    selectedProduct = null;
-}
-
-
-function changeModalQuantity(amount) {
-
-    modalQuantity += amount;
-
-    if (modalQuantity < 1) {
-        modalQuantity = 1;
-    }
-
-    document.getElementById("modal-quantity").textContent =
-        modalQuantity;
-}
-
-
-/* ============================================================
-   ADICIONAR PRODUTO CONFIGURADO AO CARRINHO
-   ============================================================ */
-
-function addConfiguredProduct() {
-
-    if (!selectedProduct) return;
-
-
-    /* Verifica sabor do Milk-shake */
-
-    let flavor = "";
-
-    if (selectedProduct.name === "Milk-shake") {
-
-        flavor = document.getElementById("flavor-select").value;
-
-        if (!flavor) {
-            alert("Selecione o sabor do Milk-shake.");
-            return;
-        }
-    }
-
-
-    /* Adicionais */
-
-    let selectedExtras = [];
-
-    if (selectedProduct.category === "hamburgueres") {
-
-        document
-            .querySelectorAll("#extras-container input:checked")
-            .forEach(input => {
-
-                selectedExtras.push({
-                    id: input.value,
-                    name: input.dataset.name,
-                    price: Number(input.dataset.price)
-                });
-
-            });
-    }
-
-
-    const observation =
-        document.getElementById("modal-observation").value.trim();
-
-
-    /* Preço unitário */
-
-    const extrasTotal = selectedExtras.reduce(
-        (sum, extra) => sum + extra.price,
-        0
-    );
-
-    const unitPrice =
-        selectedProduct.price + extrasTotal;
-
-
-    /* Item */
-
-    const cartItem = {
-
-        cartId:
-            Date.now() +
-            Math.random().toString(36).substring(2),
-
-        productId: selectedProduct.id,
-
-        name: selectedProduct.name,
-
-        basePrice: selectedProduct.price,
-
-        unitPrice: unitPrice,
-
-        quantity: modalQuantity,
-
-        flavor: flavor,
-
-        extras: selectedExtras,
-
-        observation: observation
-    };
-
-
-    cart.push(cartItem);
-
-    updateCartCount();
-
-    closeProductModal();
-
-    alert("Produto adicionado ao carrinho!");
-}
-
-
-/* ============================================================
-   CARRINHO
-   ============================================================ */
-
-function updateCartCount() {
-
-    const count = cart.reduce(
-        (total, item) => total + item.quantity,
-        0
-    );
-
-    document.getElementById("cart-count").textContent = count;
-}
-
-
-function openCart() {
-
-    updateCart();
-
-    document
-        .getElementById("cart-modal")
-        .classList.add("show");
-}
-
-
-function closeCart() {
-
-    document
-        .getElementById("cart-modal")
-        .classList.remove("show");
-}
-
-
-function calculateSubtotal() {
-
-    return cart.reduce(
-        (total, item) =>
-            total + (item.unitPrice * item.quantity),
-        0
-    );
-}
-
-
-function getCouponDiscount() {
-
-    const coupon =
-        document
-            .getElementById("coupon")
-            .value
-            .trim()
-            .toUpperCase();
-
-    if (!coupon) {
-        return 0;
-    }
-
-    return config.coupons[coupon] || 0;
-}
-
-
-function updateCart() {
-
-    const container =
-        document.getElementById("cart-items");
-
-    if (cart.length === 0) {
-
-        container.innerHTML = `
-            <div class="empty-cart">
-                Seu carrinho está vazio.
-            </div>
-        `;
-
-    } else {
-
-        container.innerHTML = cart
-            .map(renderCartItem)
-            .join("");
-    }
-
-
-    const subtotal = calculateSubtotal();
-
-    const delivery =
-        cart.length > 0
-            ? config.deliveryFee
-            : 0;
-
-    const discount =
-        Math.min(getCouponDiscount(), subtotal);
-
-    const total =
-        subtotal +
-        delivery -
-        discount;
-
-
-    document.getElementById("cart-summary").innerHTML = `
-
-        <div class="summary">
-
-            <div class="summary-row">
-                <span>Subtotal</span>
-                <strong>${formatPrice(subtotal)}</strong>
-            </div>
-
-            <div class="summary-row">
-                <span>Entrega</span>
-                <strong>${formatPrice(delivery)}</strong>
-            </div>
-
-            <div class="summary-row">
-                <span>Desconto</span>
-                <strong>- ${formatPrice(discount)}</strong>
-            </div>
-
-            <div class="summary-row summary-total">
-                <span>Total</span>
-                <strong>${formatPrice(total)}</strong>
-            </div>
-
-        </div>
-    `;
-}
-
-
-function renderCartItem(item) {
-
-    const extrasHTML = item.extras.length
-        ? `
-            <strong>Adicionais:</strong>
-            <ul>
-                ${item.extras.map(extra =>
-                    `<li>${escapeHTML(extra.name)} — ${formatPrice(extra.price)}</li>`
-                ).join("")}
-            </ul>
-        `
-        : "";
-
-
-    const flavorHTML = item.flavor
-        ? `<div><strong>Sabor:</strong> ${escapeHTML(item.flavor)}</div>`
-        : "";
-
-
-    const observationHTML = item.observation
-        ? `<div><strong>Observação:</strong> ${escapeHTML(item.observation)}</div>`
-        : "";
-
-
-    const subtotalItem =
-        item.unitPrice * item.quantity;
-
-
-    return `
-
-        <div class="cart-item">
-
-            <div class="cart-item-header">
-
-                <div class="cart-item-name">
-                    ${escapeHTML(item.name)}
-                </div>
-
-                <div class="cart-item-price">
-                    ${formatPrice(subtotalItem)}
-                </div>
-
-            </div>
-
-            <div class="cart-details">
-
-                <div>
-                    ${item.quantity}x —
-                    ${formatPrice(item.unitPrice)}
-                </div>
-
-                ${flavorHTML}
-
-                ${extrasHTML}
-
-                ${observationHTML}
-
-                <div style="margin-top:8px;">
-                    <strong>Subtotal do item:</strong>
-                    ${formatPrice(subtotalItem)}
-                </div>
-
-            </div>
-
-            <div class="cart-actions">
-
-                <button onclick="changeCartQuantity('${item.cartId}', -1)">
-                    −
-                </button>
-
-                <strong>${item.quantity}</strong>
-
-                <button onclick="changeCartQuantity('${item.cartId}', 1)">
-                    +
-                </button>
-
-                <button
-                    class="remove-btn"
-                    onclick="removeCartItem('${item.cartId}')"
-                >
-                    Remover
-                </button>
-
-            </div>
-
-        </div>
-    `;
-}
-
-
-function changeCartQuantity(cartId, amount) {
-
-    const item = cart.find(
-        item => item.cartId === cartId
-    );
-
-    if (!item) return;
-
-    item.quantity += amount;
-
-    if (item.quantity <= 0) {
-        cart = cart.filter(
-            item => item.cartId !== cartId
-        );
-    }
-
-    updateCartCount();
-
-    updateCart();
-}
-
-
-function removeCartItem(cartId) {
-
-    cart = cart.filter(
-        item => item.cartId !== cartId
-    );
-
-    updateCartCount();
-
-    updateCart();
-}
-
-
-/* ============================================================
-   WHATSAPP
-   ============================================================ */
-
-function sendWhatsAppOrder() {
-
-    if (cart.length === 0) {
-        alert("Adicione produtos ao carrinho antes de finalizar.");
-        return;
-    }
-
-
-    const name =
-        document.getElementById("customer-name")
-            .value.trim();
-
-    const address =
-        document.getElementById("customer-address")
-            .value.trim();
-
-    const neighborhood =
-        document.getElementById("customer-neighborhood")
-            .value.trim();
-
-    const complement =
-        document.getElementById("customer-complement")
-            .value.trim();
-
-    const reference =
-        document.getElementById("customer-reference")
-            .value.trim();
-
-    const payment =
-        document.getElementById("payment-method")
-            .value;
-
-
-    if (!name || !address || !neighborhood) {
-
-        alert(
-            "Preencha pelo menos Nome, Endereço e Bairro."
-        );
-
-        return;
-    }
-
-
-    const subtotal = calculateSubtotal();
-
-    const delivery = config.deliveryFee;
-
-    const discount =
-        Math.min(getCouponDiscount(), subtotal);
-
-    const total =
-        subtotal +
-        delivery -
-        discount;
-
-
-    let message =
-`🍔 *BURG HOUSE — NOVO PEDIDO*
-
-👤 Cliente: ${name}
-
-📦 *ITENS DO PEDIDO*
-
-`;
-
-
-    cart.forEach(item => {
-
-        message +=
-`${item.quantity}x ${item.name}`;
-
-        if (item.flavor) {
-            message += ` — ${item.flavor}`;
-        }
-
-        message +=
-` — ${formatPrice(item.unitPrice * item.quantity)}
-`;
-
-
-        item.extras.forEach(extra => {
-
-            message +=
-`- ${extra.name} — ${formatPrice(extra.price * item.quantity)}
-`;
-
-        });
-
-
-        if (item.observation) {
-
-            message +=
-`  Obs.: ${item.observation}
-`;
-        }
-
-
-        message += "\n";
-    });
-
-
-    message +=
-`💰 Subtotal: ${formatPrice(subtotal)}
-🚚 Entrega: ${formatPrice(delivery)}
-💸 Desconto: ${formatPrice(discount)}
-💵 *Total: ${formatPrice(total)}*
-
-📍 *ENTREGA*
-
-${address}
-Bairro ${neighborhood}
-Complemento: ${complement || "Não informado"}
-Referência: ${reference || "Não informada"}
-
-💳 *PAGAMENTO*
-${payment}`;
-
-
-    const encodedMessage =
-        encodeURIComponent(message);
-
-    const whatsappURL =
-        `https://wa.me/${config.whatsapp}?text=${encodedMessage}`;
-
-
-    window.open(
-        whatsappURL,
-        "_blank"
-    );
-}
-
-
-/* ============================================================
-   INICIALIZAÇÃO
-   ============================================================ */
-
-renderProducts();
-
-updateCartCount();
-
-</script>
-
-</body>
-</html>
 ```
