@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1012,4 +1013,941 @@ const products = [
         emoji: "🥤",
         description: "Refrigerante 600ml."
     },
+
+    {
+        id: 21,
+        name: "Refrigerante 2L",
+        category: "bebidas",
+        price: 14.00,
+        emoji: "🥤",
+        description: "Refrigerante 2 litros."
+    },
+
+    {
+        id: 22,
+        name: "Água Mineral",
+        category: "bebidas",
+        price: 4.00,
+        emoji: "💧",
+        description: "Água mineral."
+    },
+
+    {
+        id: 23,
+        name: "Suco Natural",
+        category: "bebidas",
+        price: 8.00,
+        emoji: "🧃",
+        description: "Suco natural."
+    },
+
+    {
+        id: 24,
+        name: "Milk-shake",
+        category: "bebidas",
+        price: 16.90,
+        emoji: "🥤",
+        description:
+            "Milk-shake disponível nos sabores Chocolate, Morango ou Ovomaltine."
+    }
+
+];
+
+
+let cart = [];
+
+
+/* =========================================================
+   MOEDA
+========================================================= */
+
+function money(value) {
+
+    return Number(value).toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   MOSTRAR PRODUTOS
+========================================================= */
+
+function renderProducts(category = "todos") {
+
+    const container =
+        document.getElementById("products");
+
+    container.innerHTML = "";
+
+    products
+        .filter(product =>
+            category === "todos" ||
+            product.category === category
+        )
+        .forEach(product => {
+
+            container.innerHTML += `
+
+                <div class="product">
+
+                    <div class="product-image">
+                        ${product.emoji}
+                    </div>
+
+                    <div class="product-content">
+
+                        <h3>
+                            ${product.name}
+                        </h3>
+
+                        <p>
+                            ${product.description}
+                        </p>
+
+                        <div class="price">
+                            ${money(product.price)}
+                        </div>
+
+                        <button
+                            class="add"
+                            onclick="addToCart(${product.id})"
+                        >
+                            + ADICIONAR
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+}
+
+
+/* =========================================================
+   FILTRO
+========================================================= */
+
+function filterProducts(category, button) {
+
+    document
+        .querySelectorAll(".categories button")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+    button.classList.add("active");
+
+    renderProducts(category);
+
+}
+
+
+/* =========================================================
+   ADICIONAR AO CARRINHO
+========================================================= */
+
+function addToCart(id) {
+
+    const product =
+        products.find(p => p.id === id);
+
+    const existing =
+        cart.find(item => item.id === id);
+
+    if (existing) {
+
+        existing.quantity++;
+
+    } else {
+
+        cart.push({
+
+            ...product,
+
+            quantity: 1
+
+        });
+
+    }
+
+    renderCart();
+
+    scrollToCart();
+
+}
+
+
+/* =========================================================
+   ALTERAR QUANTIDADE
+========================================================= */
+
+function changeQuantity(id, amount) {
+
+    const item =
+        cart.find(product => product.id === id);
+
+    if (!item) return;
+
+    item.quantity += amount;
+
+    if (item.quantity <= 0) {
+
+        cart =
+            cart.filter(
+                product => product.id !== id
+            );
+
+    }
+
+    renderCart();
+
+}
+
+
+/* =========================================================
+   TOTAL
+========================================================= */
+
+function getTotal() {
+
+    return cart.reduce(
+        (total, item) =>
+            total +
+            (item.price * item.quantity),
+        0
+    );
+
+}
+
+
+/* =========================================================
+   CARRINHO
+========================================================= */
+
+function renderCart() {
+
+    const container =
+        document.getElementById("cartItems");
+
+    container.innerHTML = "";
+
+    if (cart.length === 0) {
+
+        container.innerHTML =
+            `<p style="color:#999;">
+                Seu carrinho está vazio.
+            </p>`;
+
+    }
+
+
+    cart.forEach(item => {
+
+        container.innerHTML += `
+
+            <div class="cart-item">
+
+                <div class="cart-item-top">
+
+                    <div>
+
+                        <strong>
+                            ${item.name}
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            ${money(item.price)}
+                        </small>
+
+                    </div>
+
+                    <strong>
+                        ${money(
+                            item.price *
+                            item.quantity
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="qty">
+
+                    <button
+                        onclick="changeQuantity(
+                            ${item.id},
+                            -1
+                        )"
+                    >
+                        −
+                    </button>
+
+                    <span>
+                        ${item.quantity}
+                    </span>
+
+                    <button
+                        onclick="changeQuantity(
+                            ${item.id},
+                            1
+                        )"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    const total =
+        getTotal();
+
+
+    document.getElementById(
+        "cartTotal"
+    ).textContent = money(total);
+
+
+    document.getElementById(
+        "barTotal"
+    ).textContent = money(total);
+
+
+    document.getElementById(
+        "barItems"
+    ).textContent =
+        cart.reduce(
+            (sum, item) =>
+                sum + item.quantity,
+            0
+        );
+
+
+    updatePix();
+
+}
+
+
+/* =========================================================
+   PAGAMENTO
+========================================================= */
+
+function changePayment() {
+
+    const payment =
+        document.querySelector(
+            'input[name="payment"]:checked'
+        )?.value;
+
+
+    document
+        .getElementById("pixBox")
+        .classList.remove("show");
+
+    document
+        .getElementById("moneyBox")
+        .classList.remove("show");
+
+    document
+        .getElementById("cardBox")
+        .classList.remove("show");
+
+
+    if (payment === "pix") {
+
+        document
+            .getElementById("pixBox")
+            .classList.add("show");
+
+        updatePix();
+
+    }
+
+
+    if (payment === "dinheiro") {
+
+        document
+            .getElementById("moneyBox")
+            .classList.add("show");
+
+    }
+
+
+    if (payment === "cartao") {
+
+        document
+            .getElementById("cardBox")
+            .classList.add("show");
+
+    }
+
+}
+
+
+/* =========================================================
+   CRC16 PIX
+========================================================= */
+
+function crc16(payload) {
+
+    let crc = 0xFFFF;
+
+    for (
+        let i = 0;
+        i < payload.length;
+        i++
+    ) {
+
+        crc ^=
+            payload.charCodeAt(i) << 8;
+
+        for (
+            let j = 0;
+            j < 8;
+            j++
+        ) {
+
+            if (crc & 0x8000) {
+
+                crc =
+                    (crc << 1) ^
+                    0x1021;
+
+            } else {
+
+                crc <<= 1;
+
+            }
+
+            crc &= 0xFFFF;
+
+        }
+
+    }
+
+    return crc
+        .toString(16)
+        .toUpperCase()
+        .padStart(4, "0");
+
+}
+
+
+/* =========================================================
+   CAMPO PIX
+========================================================= */
+
+function pixField(id, value) {
+
+    return (
+        id +
+        String(value.length).padStart(2, "0") +
+        value
+    );
+
+}
+
+
+/* =========================================================
+   GERAR PIX
+========================================================= */
+
+function generatePix(amount) {
+
+    const merchantAccount =
+        pixField(
+            "00",
+            "BR.GOV.BCB.PIX"
+        ) +
+        pixField(
+            "01",
+            PIX_KEY
+        );
+
+
+    let payload = "";
+
+
+    payload +=
+        pixField(
+            "00",
+            "01"
+        );
+
+
+    payload +=
+        pixField(
+            "26",
+            merchantAccount
+        );
+
+
+    payload +=
+        pixField(
+            "52",
+            "0000"
+        );
+
+
+    payload +=
+        pixField(
+            "53",
+            "986"
+        );
+
+
+    payload +=
+        pixField(
+            "54",
+            Number(amount).toFixed(2)
+        );
+
+
+    payload +=
+        pixField(
+            "58",
+            "BR"
+        );
+
+
+    payload +=
+        pixField(
+            "59",
+            PIX_OWNER
+        );
+
+
+    payload +=
+        pixField(
+            "60",
+            "SAO PAULO"
+        );
+
+
+    payload +=
+        pixField(
+            "62",
+            pixField(
+                "05",
+                "***"
+            )
+        );
+
+
+    payload += "6304";
+
+
+    payload += crc16(payload);
+
+
+    return payload;
+
+}
+
+
+/* =========================================================
+   ATUALIZAR PIX
+========================================================= */
+
+function updatePix() {
+
+    const total =
+        getTotal();
+
+
+    document.getElementById(
+        "pixValue"
+    ).textContent =
+        money(total);
+
+
+    if (total <= 0) return;
+
+
+    const payload =
+        generatePix(total);
+
+
+    document.getElementById(
+        "pixCode"
+    ).value =
+        payload;
+
+
+    const qr =
+        document.getElementById("qrcode");
+
+
+    qr.innerHTML = "";
+
+
+    new QRCode(
+        qr,
+        {
+            text: payload,
+            width: 210,
+            height: 210,
+            correctLevel:
+                QRCode.CorrectLevel.M
+        }
+    );
+
+}
+
+
+/* =========================================================
+   COPIAR PIX
+========================================================= */
+
+function copyPix() {
+
+    const code =
+        document.getElementById(
+            "pixCode"
+        ).value;
+
+
+    navigator.clipboard
+        .writeText(code)
+        .then(() => {
+
+            document.getElementById(
+                "copyMessage"
+            ).textContent =
+                "✅ PIX copiado com sucesso!";
+
+        });
+
+}
+
+
+/* =========================================================
+   FINALIZAR PEDIDO
+========================================================= */
+
+function finishOrder() {
+
+    if (cart.length === 0) {
+
+        alert(
+            "Adicione pelo menos um produto ao carrinho."
+        );
+
+        return;
+
+    }
+
+
+    const name =
+        document
+            .getElementById("customerName")
+            .value.trim();
+
+
+    const phone =
+        document
+            .getElementById("customerPhone")
+            .value.trim();
+
+
+    const address =
+        document
+            .getElementById("address")
+            .value.trim();
+
+
+    const neighborhood =
+        document
+            .getElementById("neighborhood")
+            .value.trim();
+
+
+    const complement =
+        document
+            .getElementById("complement")
+            .value.trim();
+
+
+    const reference =
+        document
+            .getElementById("reference")
+            .value.trim();
+
+
+    const observation =
+        document
+            .getElementById("orderObservation")
+            .value.trim();
+
+
+    const payment =
+        document.querySelector(
+            'input[name="payment"]:checked'
+        )?.value;
+
+
+    if (!name) {
+
+        alert("Informe seu nome.");
+
+        return;
+
+    }
+
+
+    if (!phone) {
+
+        alert("Informe seu WhatsApp.");
+
+        return;
+
+    }
+
+
+    if (!address) {
+
+        alert("Informe o endereço.");
+
+        return;
+
+    }
+
+
+    if (!neighborhood) {
+
+        alert("Informe o bairro.");
+
+        return;
+
+    }
+
+
+    if (!payment) {
+
+        alert(
+            "Escolha uma forma de pagamento."
+        );
+
+        return;
+
+    }
+
+
+    let paymentText = "";
+
+
+    if (payment === "pix") {
+
+        paymentText =
+            "⚡ PIX\n" +
+            "Titular: R F NASCIMENTO\n" +
+            "Chave: " +
+            PIX_KEY;
+
+    }
+
+
+    if (payment === "dinheiro") {
+
+        const change =
+            document
+                .getElementById("changeFor")
+                .value;
+
+
+        paymentText =
+            "💵 DINHEIRO";
+
+
+        if (change) {
+
+            paymentText +=
+                "\nTroco para: " +
+                money(Number(change));
+
+        } else {
+
+            paymentText +=
+                "\nSem necessidade de troco.";
+
+        }
+
+    }
+
+
+    if (payment === "cartao") {
+
+        paymentText =
+            "💳 CARTÃO\n" +
+            "O entregador levará a máquina de cartão.";
+
+    }
+
+
+    let message = "";
+
+
+    message +=
+        "🍔 *BURG HOUSE — NOVO PEDIDO*\n\n";
+
+
+    message +=
+        "👤 *CLIENTE*\n" +
+        name +
+        "\n";
+
+
+    message +=
+        "📱 WhatsApp: " +
+        phone +
+        "\n\n";
+
+
+    message +=
+        "📦 *PEDIDO*\n\n";
+
+
+    cart.forEach(item => {
+
+        message +=
+            item.quantity +
+            "x " +
+            item.name +
+            " — " +
+            money(
+                item.price *
+                item.quantity
+            ) +
+            "\n";
+
+    });
+
+
+    message +=
+        "\n💰 *TOTAL: " +
+        money(getTotal()) +
+        "*\n\n";
+
+
+    message +=
+        "💳 *PAGAMENTO*\n" +
+        paymentText +
+        "\n\n";
+
+
+    message +=
+        "📍 *ENDEREÇO*\n" +
+        address +
+        "\n" +
+        "Bairro: " +
+        neighborhood +
+        "\n";
+
+
+    if (complement) {
+
+        message +=
+            "Complemento: " +
+            complement +
+            "\n";
+
+    }
+
+
+    if (reference) {
+
+        message +=
+            "Referência: " +
+            reference +
+            "\n";
+
+    }
+
+
+    if (observation) {
+
+        message +=
+            "\n📝 *OBSERVAÇÃO*\n" +
+            observation +
+            "\n";
+
+    }
+
+
+    message +=
+        "\n🍔 Obrigado por pedir na Burg House!";
+
+
+    if (
+        WHATSAPP_NUMBER ===
+        "COLOQUE_SEU_WHATSAPP_AQUI"
+    ) {
+
+        alert(
+            "Configure o número do WhatsApp da Burg House no código."
+        );
+
+        return;
+
+    }
+
+
+    const whatsappURL =
+        "https://wa.me/" +
+        WHATSAPP_NUMBER +
+        "?text=" +
+        encodeURIComponent(message);
+
+
+    window.open(
+        whatsappURL,
+        "_blank"
+    );
+
+}
+
+
+/* =========================================================
+   SCROLL PARA O CARRINHO
+========================================================= */
+
+function scrollToCart() {
+
+    document
+        .getElementById("cart")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+renderProducts();
+
+renderCart();
+
+</script>
+
+</body>
+</html>
 ```
