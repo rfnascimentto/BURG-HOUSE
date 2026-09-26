@@ -1,18 +1,29 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Burg House | Delivery</title>
 
+<!-- Biblioteca para QR Code -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -21,14 +32,18 @@ body {
     color: #fff;
 }
 
+/* =========================
+   HEADER
+========================= */
+
 header {
-    background: #0b0b0b;
-    padding: 18px;
+    background: #090909;
+    padding: 18px 15px;
     text-align: center;
     position: sticky;
     top: 0;
-    z-index: 100;
-    border-bottom: 1px solid #333;
+    z-index: 1000;
+    border-bottom: 1px solid #292929;
 }
 
 .logo {
@@ -46,386 +61,856 @@ header p {
     font-size: 14px;
 }
 
+
+/* =========================
+   CONTAINER
+========================= */
+
 .container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: auto;
     padding: 20px 15px 120px;
 }
 
-/* CATEGORIAS */
+
+/* =========================
+   BANNER
+========================= */
+
+.banner {
+    background:
+        linear-gradient(
+            135deg,
+            #300000,
+            #111
+        );
+
+    border-radius: 20px;
+
+    padding: 30px 20px;
+
+    margin-bottom: 25px;
+
+    text-align: center;
+
+    border: 1px solid #3b1616;
+}
+
+.banner h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.banner h1 span {
+    color: #e50914;
+}
+
+.banner p {
+    color: #ccc;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   CATEGORIAS
+========================= */
 
 .categories {
+
     display: flex;
+
     gap: 8px;
+
     overflow-x: auto;
-    padding: 5px 0 18px;
+
+    padding-bottom: 18px;
 }
 
 .categories button {
+
     border: 0;
+
     background: #292929;
+
     color: #fff;
-    padding: 10px 15px;
+
+    padding: 11px 16px;
+
     border-radius: 30px;
+
     white-space: nowrap;
+
     cursor: pointer;
+
+    font-weight: bold;
 }
 
-.categories button.active,
-.categories button:hover {
+.categories button.active {
+
     background: #e50914;
+
 }
 
-/* PRODUTOS */
+
+/* =========================
+   PRODUTOS
+========================= */
 
 .products {
+
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
     gap: 15px;
+
 }
 
 .product {
-    background: #1c1c1c;
-    border-radius: 15px;
+
+    background: #1b1b1b;
+
+    border-radius: 16px;
+
     overflow: hidden;
+
     border: 1px solid #292929;
+
+    transition: .2s;
+
+}
+
+.product:hover {
+
+    transform: translateY(-2px);
+
+    border-color: #444;
+
 }
 
 .product-image {
-    height: 150px;
-    background: linear-gradient(135deg, #2a2a2a, #111);
+
+    height: 155px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #292929,
+            #111
+        );
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
-    font-size: 55px;
+
+    font-size: 60px;
+
 }
 
 .product-content {
+
     padding: 15px;
+
 }
 
 .product h3 {
+
     font-size: 18px;
+
     margin-bottom: 8px;
+
 }
 
-.product p {
+.product-description {
+
     color: #aaa;
+
     font-size: 13px;
-    line-height: 1.4;
-    min-height: 55px;
+
+    line-height: 1.45;
+
+    min-height: 58px;
+
 }
 
-.price {
-    font-size: 19px;
-    font-weight: bold;
+.product-price {
+
     color: #f5c400;
-    margin: 12px 0;
-}
 
-.add {
-    width: 100%;
-    border: 0;
-    background: #e50914;
-    color: white;
-    padding: 12px;
-    border-radius: 8px;
+    font-size: 19px;
+
     font-weight: bold;
+
+    margin: 12px 0;
+
+}
+
+.add-button {
+
+    width: 100%;
+
+    border: 0;
+
+    background: #e50914;
+
+    color: #fff;
+
+    padding: 12px;
+
+    border-radius: 9px;
+
+    font-weight: bold;
+
     cursor: pointer;
+
 }
 
-/* CARRINHO */
 
-.cart {
-    margin-top: 25px;
-    background: #1c1c1c;
+/* =========================
+   CARRINHO
+========================= */
+
+.cart-section {
+
+    margin-top: 30px;
+
+    background: #1b1b1b;
+
+    border-radius: 16px;
+
     padding: 20px;
-    border-radius: 15px;
-    border: 1px solid #333;
+
+    border: 1px solid #292929;
+
 }
 
-.cart h2 {
-    margin-bottom: 15px;
+.section-title {
+
+    font-size: 21px;
+
+    margin-bottom: 18px;
+
+}
+
+.cart-empty {
+
+    color: #888;
+
+    text-align: center;
+
+    padding: 20px;
+
 }
 
 .cart-item {
-    border-bottom: 1px solid #333;
-    padding: 12px 0;
+
+    padding: 14px 0;
+
+    border-bottom:
+        1px solid #333;
+
 }
 
-.cart-item-top {
+.cart-item-header {
+
     display: flex;
-    justify-content: space-between;
+
+    justify-content:
+        space-between;
+
     gap: 10px;
+
 }
 
-.cart-item small {
-    color: #aaa;
+.cart-item-name {
+
+    font-weight: bold;
+
 }
 
-.qty {
+.cart-item-price {
+
+    color: #f5c400;
+
+    font-weight: bold;
+
+}
+
+.cart-item-controls {
+
     display: flex;
-    gap: 8px;
+
     align-items: center;
-    margin-top: 8px;
+
+    gap: 10px;
+
+    margin-top: 10px;
+
 }
 
-.qty button {
-    width: 28px;
-    height: 28px;
+.quantity-button {
+
+    width: 30px;
+
+    height: 30px;
+
     border: 0;
+
     border-radius: 50%;
+
     cursor: pointer;
+
+    font-weight: bold;
+
 }
 
 .cart-total {
+
     display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-    font-size: 20px;
+
+    justify-content:
+        space-between;
+
+    margin-top: 18px;
+
+    font-size: 21px;
+
 }
 
 .cart-total strong {
+
     color: #f5c400;
+
 }
 
-/* FORMULÁRIO */
 
-.checkout {
+/* =========================
+   CHECKOUT
+========================= */
+
+.checkout-section {
+
     margin-top: 20px;
-    background: #1c1c1c;
+
+    background: #1b1b1b;
+
+    border-radius: 16px;
+
     padding: 20px;
-    border-radius: 15px;
+
+    border: 1px solid #292929;
+
 }
 
-.checkout h2 {
+.form-group {
+
     margin-bottom: 15px;
+
 }
 
 label {
+
     display: block;
+
     color: #bbb;
-    margin: 13px 0 6px;
+
+    margin-bottom: 7px;
+
 }
 
 input,
 textarea,
 select {
+
     width: 100%;
-    padding: 13px;
-    background: #111;
-    color: white;
+
+    background: #101010;
+
+    color: #fff;
+
     border: 1px solid #444;
-    border-radius: 8px;
-    outline: none;
+
+    border-radius: 9px;
+
+    padding: 13px;
+
     font-size: 15px;
+
+    outline: none;
+
 }
 
 textarea {
-    min-height: 80px;
+
+    min-height: 90px;
+
     resize: vertical;
+
 }
 
 input:focus,
 textarea:focus,
 select:focus {
+
     border-color: #e50914;
+
 }
 
-/* PAGAMENTO */
+
+/* =========================
+   ENTREGA / RETIRADA
+========================= */
+
+.delivery-options {
+
+    display: grid;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+}
+
+.delivery-option {
+
+    background: #101010;
+
+    border: 1px solid #444;
+
+    border-radius: 10px;
+
+    padding: 14px;
+
+    cursor: pointer;
+
+}
+
+.delivery-option input {
+
+    width: auto;
+
+    margin-right: 7px;
+
+}
+
+
+/* =========================
+   PAGAMENTO
+========================= */
+
+.payment-step {
+
+    margin-top: 25px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #333;
+
+}
 
 .payment-options {
+
     display: grid;
+
     gap: 10px;
-    margin-top: 10px;
+
 }
 
 .payment-option {
-    background: #111;
+
+    display: block;
+
+    background: #101010;
+
     border: 1px solid #444;
+
     padding: 15px;
+
     border-radius: 10px;
+
     cursor: pointer;
+
 }
 
 .payment-option input {
+
     width: auto;
+
     margin-right: 8px;
+
 }
 
 .payment-option strong {
-    display: block;
-    margin-bottom: 4px;
+
+    font-size: 16px;
+
 }
 
 .payment-option small {
-    color: #999;
-}
 
-/* PIX */
-
-.pix-box {
-    display: none;
-    background: #101010;
-    padding: 18px;
-    margin-top: 15px;
-    border-radius: 12px;
-    border: 1px solid #00a859;
-    text-align: center;
-}
-
-.pix-box.show {
     display: block;
+
+    color: #999;
+
+    margin-top: 6px;
+
+    margin-left: 23px;
+
+}
+
+
+/* =========================
+   ÁREA PIX
+========================= */
+
+.pix-payment {
+
+    display: none;
+
+    background: #101010;
+
+    border: 1px solid #00a859;
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    margin-top: 15px;
+
+    text-align: center;
+
+}
+
+.pix-payment.show {
+
+    display: block;
+
+}
+
+.pix-payment h3 {
+
+    color: #00d26a;
+
+    margin-bottom: 10px;
+
 }
 
 .pix-owner {
-    margin-bottom: 15px;
-    color: #bbb;
+
+    color: #aaa;
+
+    line-height: 1.6;
+
 }
 
 .pix-owner strong {
-    display: block;
+
     color: #fff;
-    margin-top: 5px;
+
+    display: block;
+
 }
 
-.pix-value {
-    font-size: 24px;
+.pix-total {
+
+    font-size: 28px;
+
     color: #00d26a;
+
     font-weight: bold;
-    margin: 15px 0;
+
+    margin: 18px 0;
+
 }
 
 #qrcode {
+
     width: 230px;
+
     height: 230px;
-    background: white;
+
+    background: #fff;
+
     padding: 10px;
+
     margin: 15px auto;
+
     border-radius: 10px;
+
 }
 
 #pixCode {
-    width: 100%;
-    height: 90px;
-    resize: none;
+
+    height: 100px;
+
     font-size: 11px;
-    margin-top: 10px;
+
+    resize: none;
+
 }
 
-.copy-button {
+.copy-pix {
+
     width: 100%;
-    background: #f5c400;
-    border: 0;
-    padding: 13px;
+
     margin-top: 8px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-}
 
-/* DINHEIRO */
+    padding: 13px;
 
-.money-box {
-    display: none;
-    margin-top: 12px;
-    padding: 15px;
-    background: #111;
-    border-radius: 10px;
-}
-
-.money-box.show {
-    display: block;
-}
-
-/* CARTÃO */
-
-.card-box {
-    display: none;
-    margin-top: 12px;
-    padding: 15px;
-    background: #111;
-    border-radius: 10px;
-    border: 1px solid #555;
-}
-
-.card-box.show {
-    display: block;
-}
-
-.card-box strong {
-    color: #f5c400;
-}
-
-/* BOTÃO */
-
-.finish {
-    width: 100%;
     border: 0;
-    background: #25d366;
-    color: white;
-    padding: 17px;
-    border-radius: 12px;
-    font-size: 17px;
+
+    border-radius: 9px;
+
+    background: #f5c400;
+
+    color: #111;
+
     font-weight: bold;
+
     cursor: pointer;
+
+}
+
+.copy-message {
+
+    color: #00d26a;
+
+    margin-top: 10px;
+
+}
+
+
+/* =========================
+   DINHEIRO
+========================= */
+
+.money-payment {
+
+    display: none;
+
+    background: #101010;
+
+    padding: 15px;
+
+    margin-top: 15px;
+
+    border-radius: 10px;
+
+}
+
+.money-payment.show {
+
+    display: block;
+
+}
+
+
+/* =========================
+   CARTÃO
+========================= */
+
+.card-payment {
+
+    display: none;
+
+    background: #101010;
+
+    padding: 18px;
+
+    margin-top: 15px;
+
+    border-radius: 10px;
+
+    border: 1px solid #444;
+
+}
+
+.card-payment.show {
+
+    display: block;
+
+}
+
+.card-payment strong {
+
+    color: #f5c400;
+
+}
+
+
+/* =========================
+   RESUMO FINAL
+========================= */
+
+.final-summary {
+
     margin-top: 20px;
+
+    background: #101010;
+
+    border-radius: 12px;
+
+    padding: 18px;
+
 }
 
-.finish:hover {
+.summary-line {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    margin-bottom: 9px;
+
+    color: #bbb;
+
+}
+
+.summary-total {
+
+    border-top:
+        1px solid #333;
+
+    padding-top: 12px;
+
+    margin-top: 12px;
+
+    font-size: 21px;
+
+    color: #fff;
+
+}
+
+.summary-total strong {
+
+    color: #f5c400;
+
+}
+
+
+/* =========================
+   FINALIZAR
+========================= */
+
+.finish-button {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    background: #25d366;
+
+    color: white;
+
+    padding: 17px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+.finish-button:hover {
+
     opacity: .9;
+
 }
 
-/* BARRA DO CARRINHO */
+
+/* =========================
+   BARRA DO CARRINHO
+========================= */
 
 .cart-bar {
+
     position: fixed;
+
     bottom: 0;
+
     left: 0;
+
     right: 0;
+
     background: #e50914;
-    padding: 13px 20px;
-    z-index: 200;
+
+    z-index: 2000;
+
+    padding: 13px 15px;
+
 }
 
 .cart-bar button {
-    width: 100%;
-    max-width: 900px;
+
     display: block;
+
+    max-width: 1000px;
+
+    width: 100%;
+
     margin: auto;
-    border: 0;
+
     background: transparent;
+
     color: white;
+
+    border: 0;
+
     font-size: 17px;
+
     font-weight: bold;
+
     cursor: pointer;
+
 }
 
-/* RESPONSIVO */
 
-@media (max-width: 600px) {
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width: 600px) {
 
     .products {
+
         grid-template-columns: 1fr;
+
     }
 
     .product-image {
+
         height: 170px;
+
+    }
+
+    .banner h1 {
+
+        font-size: 27px;
+
     }
 
 }
 
-@media (min-width: 601px) {
-
-    .products {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-}
 </style>
+
 </head>
 
+
 <body>
+
+
+<!-- =========================
+     CABEÇALHO
+========================= -->
 
 <header>
 
@@ -433,78 +918,180 @@ select:focus {
         🍔 BURG <span>HOUSE</span>
     </div>
 
-    <p>Seu burger favorito, do nosso jeito!</p>
+    <p>
+        Seu burger favorito, do nosso jeito!
+    </p>
 
 </header>
 
 
 <div class="container">
 
-    <!-- CATEGORIAS -->
 
-    <div class="categories">
+<!-- =========================
+     BANNER
+========================= -->
 
-        <button class="active" onclick="filterProducts('todos', this)">
-            Todos
-        </button>
+<section class="banner">
 
-        <button onclick="filterProducts('hamburgueres', this)">
-            🍔 Hambúrgueres
-        </button>
+    <h1>
+        🍔 <span>BURG HOUSE</span>
+    </h1>
 
-        <button onclick="filterProducts('combos', this)">
-            🍔 Combos
-        </button>
+    <p>
+        Hambúrguer artesanal, combos,
+        porções e bebidas.
+    </p>
 
-        <button onclick="filterProducts('porcoes', this)">
-            🍟 Porções
-        </button>
+</section>
 
-        <button onclick="filterProducts('bebidas', this)">
-            🥤 Bebidas
-        </button>
+
+<!-- =========================
+     CATEGORIAS
+========================= -->
+
+<div class="categories">
+
+    <button
+        class="active"
+        onclick="filterProducts('todos', this)"
+    >
+        Todos
+    </button>
+
+    <button
+        onclick="filterProducts('hamburgueres', this)"
+    >
+        🍔 Hambúrgueres
+    </button>
+
+    <button
+        onclick="filterProducts('combos', this)"
+    >
+        🍔 Combos
+    </button>
+
+    <button
+        onclick="filterProducts('porcoes', this)"
+    >
+        🍟 Porções
+    </button>
+
+    <button
+        onclick="filterProducts('bebidas', this)"
+    >
+        🥤 Bebidas
+    </button>
+
+</div>
+
+
+<!-- =========================
+     PRODUTOS
+========================= -->
+
+<div
+    id="products"
+    class="products"
+></div>
+
+
+<!-- =========================
+     CARRINHO
+========================= -->
+
+<section
+    id="cart"
+    class="cart-section"
+>
+
+    <h2 class="section-title">
+        🛒 Seu pedido
+    </h2>
+
+    <div id="cartItems">
+
+        <div class="cart-empty">
+
+            Seu carrinho está vazio.
+
+        </div>
+
+    </div>
+
+    <div class="cart-total">
+
+        <span>
+            Total
+        </span>
+
+        <strong id="cartTotal">
+            R$ 0,00
+        </strong>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CHECKOUT
+========================= -->
+
+<section class="checkout-section">
+
+    <h2 class="section-title">
+        📦 Finalizar pedido
+    </h2>
+
+
+    <!-- TIPO DE ENTREGA -->
+
+    <h3 style="margin-bottom:12px;">
+        Como deseja receber?
+    </h3>
+
+
+    <div class="delivery-options">
+
+        <label class="delivery-option">
+
+            <input
+                type="radio"
+                name="deliveryType"
+                value="entrega"
+                checked
+                onchange="changeDeliveryType()"
+            >
+
+            🛵 Entrega
+
+        </label>
+
+
+        <label class="delivery-option">
+
+            <input
+                type="radio"
+                name="deliveryType"
+                value="retirada"
+                onchange="changeDeliveryType()"
+            >
+
+            🏪 Retirar no local
+
+        </label>
 
     </div>
 
 
-    <!-- PRODUTOS -->
+    <!-- DADOS CLIENTE -->
 
-    <div id="products" class="products"></div>
+    <div class="form-group">
 
-
-    <!-- CARRINHO -->
-
-    <section class="cart" id="cart">
-
-        <h2>🛒 Seu pedido</h2>
-
-        <div id="cartItems">
-            <p style="color:#999;">
-                Seu carrinho está vazio.
-            </p>
-        </div>
-
-        <div class="cart-total">
-
-            <span>Total</span>
-
-            <strong id="cartTotal">
-                R$ 0,00
-            </strong>
-
-        </div>
-
-    </section>
-
-
-    <!-- FINALIZAÇÃO -->
-
-    <section class="checkout">
-
-        <h2>📦 Dados da entrega</h2>
-
-
-        <label>Nome *</label>
+        <label>
+            Nome *
+        </label>
 
         <input
             type="text"
@@ -512,8 +1099,14 @@ select:focus {
             placeholder="Seu nome"
         >
 
+    </div>
 
-        <label>WhatsApp *</label>
+
+    <div class="form-group">
+
+        <label>
+            WhatsApp *
+        </label>
 
         <input
             type="tel"
@@ -521,59 +1114,104 @@ select:focus {
             placeholder="(11) 99999-9999"
         >
 
-
-        <label>Endereço *</label>
-
-        <input
-            type="text"
-            id="address"
-            placeholder="Rua e número"
-        >
+    </div>
 
 
-        <label>Bairro *</label>
+    <!-- ENDEREÇO -->
 
-        <input
-            type="text"
-            id="neighborhood"
-            placeholder="Seu bairro"
-        >
+    <div id="addressFields">
 
+        <div class="form-group">
 
-        <label>Complemento</label>
+            <label>
+                Endereço *
+            </label>
 
-        <input
-            type="text"
-            id="complement"
-            placeholder="Casa, apartamento..."
-        >
+            <input
+                type="text"
+                id="address"
+                placeholder="Rua e número"
+            >
 
-
-        <label>Ponto de referência</label>
-
-        <input
-            type="text"
-            id="reference"
-            placeholder="Próximo de..."
-        >
+        </div>
 
 
-        <label>Observação do pedido</label>
+        <div class="form-group">
+
+            <label>
+                Bairro *
+            </label>
+
+            <input
+                type="text"
+                id="neighborhood"
+                placeholder="Seu bairro"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Complemento
+            </label>
+
+            <input
+                type="text"
+                id="complement"
+                placeholder="Casa, apartamento..."
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Ponto de referência
+            </label>
+
+            <input
+                type="text"
+                id="reference"
+                placeholder="Próximo de..."
+            >
+
+        </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Observação do pedido
+        </label>
 
         <textarea
-            id="orderObservation"
-            placeholder="Alguma observação?"
+            id="observation"
+            placeholder="Ex: sem cebola, tocar campainha..."
         ></textarea>
 
+    </div>
 
-        <!-- PAGAMENTO -->
 
-        <h2 style="margin-top:25px;">
+    <!-- =========================
+         PAGAMENTO
+    ========================= -->
+
+    <div class="payment-step">
+
+        <h3 style="margin-bottom:14px;">
             💳 Forma de pagamento
-        </h2>
+        </h3>
 
 
         <div class="payment-options">
+
+
+            <!-- PIX -->
 
             <label class="payment-option">
 
@@ -581,17 +1219,22 @@ select:focus {
                     type="radio"
                     name="payment"
                     value="pix"
-                    onchange="changePayment()"
+                    onchange="selectPayment()"
                 >
 
-                <strong>⚡ PIX</strong>
+                <strong>
+                    ⚡ PIX
+                </strong>
 
                 <small>
-                    Pague pelo QR Code ou PIX Copia e Cola.
+                    Pague pelo QR Code ou
+                    PIX Copia e Cola.
                 </small>
 
             </label>
 
+
+            <!-- DINHEIRO -->
 
             <label class="payment-option">
 
@@ -599,17 +1242,22 @@ select:focus {
                     type="radio"
                     name="payment"
                     value="dinheiro"
-                    onchange="changePayment()"
+                    onchange="selectPayment()"
                 >
 
-                <strong>💵 Dinheiro</strong>
+                <strong>
+                    💵 Dinheiro
+                </strong>
 
                 <small>
-                    Pagamento em espécie ao entregador.
+                    Pagamento em espécie
+                    ao entregador.
                 </small>
 
             </label>
 
+
+            <!-- CARTÃO -->
 
             <label class="payment-option">
 
@@ -617,29 +1265,41 @@ select:focus {
                     type="radio"
                     name="payment"
                     value="cartao"
-                    onchange="changePayment()"
+                    onchange="selectPayment()"
                 >
 
-                <strong>💳 Cartão</strong>
+                <strong>
+                    💳 Cartão
+                </strong>
 
                 <small>
-                    O entregador levará a máquina de cartão.
+                    O entregador levará
+                    a máquina de cartão.
                 </small>
 
             </label>
 
+
         </div>
 
 
-        <!-- PIX -->
+        <!-- =========================
+             PIX
+        ========================= -->
 
-        <div id="pixBox" class="pix-box">
+        <div
+            id="pixPayment"
+            class="pix-payment"
+        >
 
-            <h3>⚡ Pagamento via PIX</h3>
+            <h3>
+                ⚡ Pagamento PIX
+            </h3>
+
 
             <div class="pix-owner">
 
-                Titular da chave PIX:
+                Titular da chave:
 
                 <strong>
                     R F NASCIMENTO
@@ -648,13 +1308,20 @@ select:focus {
             </div>
 
 
-            <div class="pix-value" id="pixValue">
+            <div
+                id="pixTotal"
+                class="pix-total"
+            >
                 R$ 0,00
             </div>
 
 
             <p style="color:#aaa;">
-                Escaneie o QR Code pelo aplicativo do seu banco.
+
+                Escaneie o QR Code
+                usando o aplicativo
+                do seu banco.
+
             </p>
 
 
@@ -662,7 +1329,9 @@ select:focus {
 
 
             <p style="color:#aaa;">
-                Ou utilize o PIX Copia e Cola:
+
+                Ou copie o código PIX:
+
             </p>
 
 
@@ -673,97 +1342,198 @@ select:focus {
 
 
             <button
-                class="copy-button"
+                class="copy-pix"
                 onclick="copyPix()"
             >
+
                 📋 COPIAR PIX
+
             </button>
 
 
-            <p
+            <div
                 id="copyMessage"
-                style="
-                    color:#00d26a;
-                    margin-top:10px;
-                "
-            ></p>
+                class="copy-message"
+            ></div>
+
 
         </div>
 
 
-        <!-- DINHEIRO -->
+        <!-- =========================
+             DINHEIRO
+        ========================= -->
 
-        <div id="moneyBox" class="money-box">
+        <div
+            id="moneyPayment"
+            class="money-payment"
+        >
 
-            <strong>💵 Pagamento em dinheiro</strong>
+            <strong>
+                💵 Pagamento em dinheiro
+            </strong>
 
-            <label>
-                Troco para quanto?
-            </label>
 
-            <input
-                type="number"
-                id="changeFor"
-                step="0.01"
-                placeholder="Ex: 100.00"
-            >
+            <div class="form-group"
+                 style="margin-top:12px;">
 
-            <small style="
-                display:block;
-                color:#888;
-                margin-top:8px;
-            ">
-                Se não precisar de troco, deixe vazio.
+                <label>
+                    Troco para quanto?
+                </label>
+
+                <input
+                    type="number"
+                    id="changeFor"
+                    step="0.01"
+                    placeholder="Ex: 100,00"
+                >
+
+            </div>
+
+
+            <small style="color:#888;">
+
+                Se não precisar de troco,
+                deixe o campo vazio.
+
             </small>
 
         </div>
 
 
-        <!-- CARTÃO -->
+        <!-- =========================
+             CARTÃO
+        ========================= -->
 
-        <div id="cardBox" class="card-box">
+        <div
+            id="cardPayment"
+            class="card-payment"
+        >
 
             <strong>
                 💳 Pagamento com cartão
             </strong>
 
-            <p style="
-                color:#aaa;
-                margin-top:8px;
-                line-height:1.5;
-            ">
-                Você poderá pagar com cartão de débito ou
-                crédito. A máquina de cartão será levada pelo
-                entregador no momento da entrega.
+            <p
+                style="
+                    color:#aaa;
+                    line-height:1.5;
+                    margin-top:8px;
+                "
+            >
+
+                O pagamento será realizado
+                no momento da entrega.
+
+                <br><br>
+
+                💳 O entregador levará
+                a máquina de cartão.
+
+                <br><br>
+
+                Você poderá pagar no
+                débito ou crédito.
+
             </p>
 
         </div>
 
 
-        <button
-            class="finish"
-            onclick="finishOrder()"
-        >
-            📲 FINALIZAR PEDIDO PELO WHATSAPP
-        </button>
+    </div>
 
-    </section>
+
+    <!-- =========================
+         RESUMO
+    ========================= -->
+
+    <div class="final-summary">
+
+        <div class="summary-line">
+
+            <span>
+                Subtotal
+            </span>
+
+            <strong id="summarySubtotal">
+                R$ 0,00
+            </strong>
+
+        </div>
+
+
+        <div class="summary-line">
+
+            <span>
+                Entrega
+            </span>
+
+            <strong id="summaryDelivery">
+                R$ 0,00
+            </strong>
+
+        </div>
+
+
+        <div
+            class="summary-line summary-total"
+        >
+
+            <span>
+                Total
+            </span>
+
+            <strong id="summaryTotal">
+                R$ 0,00
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         FINALIZAR
+    ========================= -->
+
+    <button
+        class="finish-button"
+        onclick="finishOrder()"
+    >
+
+        📲 CONFIRMAR PEDIDO PELO WHATSAPP
+
+    </button>
+
+
+</section>
 
 </div>
 
 
-<!-- BARRA DO CARRINHO -->
+<!-- =========================
+     BARRA CARRINHO
+========================= -->
 
 <div class="cart-bar">
 
-    <button onclick="scrollToCart()">
+    <button onclick="goToCart()">
 
         🛒
-        <span id="barItems">0</span>
-        itens —
-        <span id="barTotal">R$ 0,00</span>
 
-        • VER PEDIDO
+        <span id="barItems">
+            0
+        </span>
+
+        itens —
+
+        <span id="barTotal">
+            R$ 0,00
+        </span>
+
+        &nbsp; • &nbsp;
+
+        VER PEDIDO
 
     </button>
 
@@ -772,26 +1542,32 @@ select:focus {
 
 <script>
 
+
 /* =========================================================
    CONFIGURAÇÕES DA BURG HOUSE
 ========================================================= */
 
 
 /*
-   COLOQUE AQUI O NÚMERO REAL DO WHATSAPP.
+   COLOQUE AQUI O WHATSAPP REAL DA BURG HOUSE.
 
    Formato:
-   55 + DDD + número
 
-   Exemplo:
    5511999999999
+
+   Sem:
+   +
+   espaços
+   parênteses
+   hífen
 */
 
-const WHATSAPP_NUMBER = "COLOQUE_SEU_WHATSAPP_AQUI";
+const WHATSAPP_NUMBER =
+    "COLOQUE_SEU_WHATSAPP_AQUI";
 
 
 /*
-   CHAVE PIX DA BURG HOUSE
+   CHAVE PIX
 */
 
 const PIX_KEY =
@@ -799,259 +1575,292 @@ const PIX_KEY =
 
 
 /*
-   TITULAR DA CHAVE
+   TITULAR DA CHAVE PIX
 */
 
 const PIX_OWNER =
     "R F NASCIMENTO";
 
 
-*
+/*
+   CIDADE UTILIZADA NO PIX
+*/
+
+const PIX_CITY =
+    "SAO PAULO";
+
+
+/*
+   TAXA DE ENTREGA
+
+   Altere aqui caso queira.
+*/
+
+const DELIVERY_FEE =
+    6.00;
+
+
 /* =========================================================
    PRODUTOS
 ========================================================= */
 
 const products = [
 
-    {
-        id: 1,
-        name: "Clássico House",
-        category: "hamburgueres",
-        price: 24.90,
-        emoji: "🍔",
-        description:
-            "Pão brioche, hambúrguer artesanal 150g, queijo cheddar, alface, tomate e molho especial."
-    },
+{
+    id: 1,
+    name: "Clássico House",
+    category: "hamburgueres",
+    price: 24.90,
+    emoji: "🍔",
+    description:
+    "Pão brioche, hambúrguer artesanal 150g, queijo cheddar, alface, tomate e molho especial."
+},
 
-    {
-        id: 2,
-        name: "Cheddar Bacon",
-        category: "hamburgueres",
-        price: 29.90,
-        emoji: "🧀",
-        description:
-            "Pão brioche, hambúrguer 180g, cheddar cremoso, bacon crocante e molho barbecue."
-    },
+{
+    id: 2,
+    name: "Cheddar Bacon",
+    category: "hamburgueres",
+    price: 29.90,
+    emoji: "🧀",
+    description:
+    "Pão brioche, hambúrguer 180g, cheddar cremoso, bacon crocante e molho barbecue."
+},
 
-    {
-        id: 3,
-        name: "Brutus Bacon",
-        category: "hamburgueres",
-        price: 34.90,
-        emoji: "🔥",
-        description:
-            "Pão brioche, hambúrguer 180g, cheddar, bacon em dobro, cebola caramelizada e molho da casa."
-    },
+{
+    id: 3,
+    name: "Brutus Bacon",
+    category: "hamburgueres",
+    price: 34.90,
+    emoji: "🔥",
+    description:
+    "Pão brioche, hambúrguer 180g, cheddar, bacon em dobro, cebola caramelizada e molho da casa."
+},
 
-    {
-        id: 4,
-        name: "Chicken Crispy",
-        category: "hamburgueres",
-        price: 26.90,
-        emoji: "🐔",
-        description:
-            "Pão brioche, filé de frango empanado, queijo prato, alface e maionese especial."
-    },
+{
+    id: 4,
+    name: "Chicken Crispy",
+    category: "hamburgueres",
+    price: 26.90,
+    emoji: "🐔",
+    description:
+    "Pão brioche, filé de frango empanado, queijo prato, alface e maionese especial."
+},
 
-    {
-        id: 5,
-        name: "Duplo Smash",
-        category: "hamburgueres",
-        price: 31.90,
-        emoji: "🍔",
-        description:
-            "Dois hambúrgueres smash 100g, queijo cheddar duplo, cebola grelhada e molho especial."
-    },
+{
+    id: 5,
+    name: "Duplo Smash",
+    category: "hamburgueres",
+    price: 31.90,
+    emoji: "🍔",
+    description:
+    "Dois hambúrgueres smash 100g, queijo cheddar duplo, cebola grelhada e molho especial."
+},
 
-    {
-        id: 6,
-        name: "Veggie Burger",
-        category: "hamburgueres",
-        price: 27.90,
-        emoji: "🌱",
-        description:
-            "Hambúrguer vegetal, queijo, alface, tomate e molho verde."
-    },
-
-
-    /* COMBOS */
-
-    {
-        id: 7,
-        name: "Combo Clássico",
-        category: "combos",
-        price: 34.90,
-        emoji: "🍔",
-        description:
-            "Clássico House + Batata Frita P + Refrigerante Lata."
-    },
-
-    {
-        id: 8,
-        name: "Combo Cheddar",
-        category: "combos",
-        price: 39.90,
-        emoji: "🧀",
-        description:
-            "Cheddar Bacon + Batata Frita M + Refrigerante Lata."
-    },
-
-    {
-        id: 9,
-        name: "Combo Brutus",
-        category: "combos",
-        price: 49.90,
-        emoji: "🔥",
-        description:
-            "Brutus Bacon + Batata Frita G + Refrigerante 600ml."
-    },
-
-    {
-        id: 10,
-        name: "Combo Chicken",
-        category: "combos",
-        price: 36.90,
-        emoji: "🐔",
-        description:
-            "Chicken Crispy + Batata Frita P + Refrigerante Lata."
-    },
-
-    {
-        id: 11,
-        name: "Combo Família",
-        category: "combos",
-        price: 119.90,
-        emoji: "👨‍👩‍👧‍👦",
-        description:
-            "4 Hambúrgueres Clássicos + 2 Batatas G + Refrigerante 2L."
-    },
+{
+    id: 6,
+    name: "Veggie Burger",
+    category: "hamburgueres",
+    price: 27.90,
+    emoji: "🌱",
+    description:
+    "Hambúrguer vegetal, queijo, alface, tomate e molho verde."
+},
 
 
-    /* PORÇÕES */
+/* COMBOS */
 
-    {
-        id: 12,
-        name: "Batata Frita P",
-        category: "porcoes",
-        price: 12.90,
-        emoji: "🍟",
-        description: "Batata frita tamanho pequeno."
-    },
+{
+    id: 7,
+    name: "Combo Clássico",
+    category: "combos",
+    price: 34.90,
+    emoji: "🍔",
+    description:
+    "Clássico House + Batata Frita P + Refrigerante Lata."
+},
 
-    {
-        id: 13,
-        name: "Batata Frita M",
-        category: "porcoes",
-        price: 17.90,
-        emoji: "🍟",
-        description: "Batata frita tamanho médio."
-    },
+{
+    id: 8,
+    name: "Combo Cheddar",
+    category: "combos",
+    price: 39.90,
+    emoji: "🧀",
+    description:
+    "Cheddar Bacon + Batata Frita M + Refrigerante Lata."
+},
 
-    {
-        id: 14,
-        name: "Batata Frita G",
-        category: "porcoes",
-        price: 22.90,
-        emoji: "🍟",
-        description: "Batata frita tamanho grande."
-    },
+{
+    id: 9,
+    name: "Combo Brutus",
+    category: "combos",
+    price: 49.90,
+    emoji: "🔥",
+    description:
+    "Brutus Bacon + Batata Frita G + Refrigerante 600ml."
+},
 
-    {
-        id: 15,
-        name: "Batata Cheddar e Bacon",
-        category: "porcoes",
-        price: 29.90,
-        emoji: "🧀",
-        description: "Batata frita com cheddar e bacon."
-    },
+{
+    id: 10,
+    name: "Combo Chicken",
+    category: "combos",
+    price: 36.90,
+    emoji: "🐔",
+    description:
+    "Chicken Crispy + Batata Frita P + Refrigerante Lata."
+},
 
-    {
-        id: 16,
-        name: "Onion Rings",
-        category: "porcoes",
-        price: 19.90,
-        emoji: "🧅",
-        description: "Anéis de cebola crocantes."
-    },
-
-    {
-        id: 17,
-        name: "Torresmo Crocante",
-        category: "porcoes",
-        price: 24.90,
-        emoji: "🥓",
-        description: "Torresmo crocante."
-    },
-
-    {
-        id: 18,
-        name: "Frango Crocante",
-        category: "porcoes",
-        price: 29.90,
-        emoji: "🍗",
-        description: "10 unidades de frango crocante."
-    },
+{
+    id: 11,
+    name: "Combo Família",
+    category: "combos",
+    price: 119.90,
+    emoji: "👨‍👩‍👧‍👦",
+    description:
+    "4 Hambúrgueres Clássicos + 2 Batatas G + Refrigerante 2L."
+},
 
 
-    /* BEBIDAS */
+/* PORÇÕES */
 
-    {
-        id: 19,
-        name: "Refrigerante Lata 350ml",
-        category: "bebidas",
-        price: 6.00,
-        emoji: "🥤",
-        description: "Refrigerante lata 350ml."
-    },
+{
+    id: 12,
+    name: "Batata Frita P",
+    category: "porcoes",
+    price: 12.90,
+    emoji: "🍟",
+    description:
+    "Batata frita tamanho pequeno."
+},
 
-    {
-        id: 20,
-        name: "Refrigerante 600ml",
-        category: "bebidas",
-        price: 9.00,
-        emoji: "🥤",
-        description: "Refrigerante 600ml."
-    },
+{
+    id: 13,
+    name: "Batata Frita M",
+    category: "porcoes",
+    price: 17.90,
+    emoji: "🍟",
+    description:
+    "Batata frita tamanho médio."
+},
 
-    {
-        id: 21,
-        name: "Refrigerante 2L",
-        category: "bebidas",
-        price: 14.00,
-        emoji: "🥤",
-        description: "Refrigerante 2 litros."
-    },
+{
+    id: 14,
+    name: "Batata Frita G",
+    category: "porcoes",
+    price: 22.90,
+    emoji: "🍟",
+    description:
+    "Batata frita tamanho grande."
+},
 
-    {
-        id: 22,
-        name: "Água Mineral",
-        category: "bebidas",
-        price: 4.00,
-        emoji: "💧",
-        description: "Água mineral."
-    },
+{
+    id: 15,
+    name: "Batata Cheddar e Bacon",
+    category: "porcoes",
+    price: 29.90,
+    emoji: "🧀",
+    description:
+    "Batata frita com cheddar e bacon."
+},
 
-    {
-        id: 23,
-        name: "Suco Natural",
-        category: "bebidas",
-        price: 8.00,
-        emoji: "🧃",
-        description: "Suco natural."
-    },
+{
+    id: 16,
+    name: "Onion Rings",
+    category: "porcoes",
+    price: 19.90,
+    emoji: "🧅",
+    description:
+    "Anéis de cebola crocantes."
+},
 
-    {
-        id: 24,
-        name: "Milk-shake",
-        category: "bebidas",
-        price: 16.90,
-        emoji: "🥤",
-        description:
-            "Milk-shake disponível nos sabores Chocolate, Morango ou Ovomaltine."
-    }
+{
+    id: 17,
+    name: "Torresmo Crocante",
+    category: "porcoes",
+    price: 24.90,
+    emoji: "🥓",
+    description:
+    "Torresmo crocante."
+},
+
+{
+    id: 18,
+    name: "Frango Crocante",
+    category: "porcoes",
+    price: 29.90,
+    emoji: "🍗",
+    description:
+    "Frango crocante com 10 unidades."
+},
+
+
+/* BEBIDAS */
+
+{
+    id: 19,
+    name: "Refrigerante Lata 350ml",
+    category: "bebidas",
+    price: 6.00,
+    emoji: "🥤",
+    description:
+    "Refrigerante lata 350ml."
+},
+
+{
+    id: 20,
+    name: "Refrigerante 600ml",
+    category: "bebidas",
+    price: 9.00,
+    emoji: "🥤",
+    description:
+    "Refrigerante 600ml."
+},
+
+{
+    id: 21,
+    name: "Refrigerante 2L",
+    category: "bebidas",
+    price: 14.00,
+    emoji: "🥤",
+    description:
+    "Refrigerante 2 litros."
+},
+
+{
+    id: 22,
+    name: "Água Mineral",
+    category: "bebidas",
+    price: 4.00,
+    emoji: "💧",
+    description:
+    "Água mineral."
+},
+
+{
+    id: 23,
+    name: "Suco Natural",
+    category: "bebidas",
+    price: 8.00,
+    emoji: "🧃",
+    description:
+    "Suco natural."
+},
+
+{
+    id: 24,
+    name: "Milk-shake",
+    category: "bebidas",
+    price: 16.90,
+    emoji: "🥤",
+    description:
+    "Chocolate, Morango ou Ovomaltine."
+}
 
 ];
 
+
+/* =========================================================
+   CARRINHO
+========================================================= */
 
 let cart = [];
 
@@ -1074,55 +1883,72 @@ function money(value) {
 
 
 /* =========================================================
-   MOSTRAR PRODUTOS
+   PRODUTOS
 ========================================================= */
 
-function renderProducts(category = "todos") {
+function renderProducts(
+    category = "todos"
+) {
 
     const container =
-        document.getElementById("products");
+        document.getElementById(
+            "products"
+        );
 
     container.innerHTML = "";
 
+
     products
-        .filter(product =>
-            category === "todos" ||
-            product.category === category
-        )
+        .filter(product => {
+
+            return (
+                category === "todos" ||
+                product.category === category
+            );
+
+        })
         .forEach(product => {
 
             container.innerHTML += `
 
-                <div class="product">
+            <article class="product">
 
-                    <div class="product-image">
-                        ${product.emoji}
-                    </div>
+                <div class="product-image">
 
-                    <div class="product-content">
-
-                        <h3>
-                            ${product.name}
-                        </h3>
-
-                        <p>
-                            ${product.description}
-                        </p>
-
-                        <div class="price">
-                            ${money(product.price)}
-                        </div>
-
-                        <button
-                            class="add"
-                            onclick="addToCart(${product.id})"
-                        >
-                            + ADICIONAR
-                        </button>
-
-                    </div>
+                    ${product.emoji}
 
                 </div>
+
+                <div class="product-content">
+
+                    <h3>
+                        ${product.name}
+                    </h3>
+
+                    <p class="product-description">
+
+                        ${product.description}
+
+                    </p>
+
+                    <div class="product-price">
+
+                        ${money(product.price)}
+
+                    </div>
+
+                    <button
+                        class="add-button"
+                        onclick="addToCart(${product.id})"
+                    >
+
+                        + ADICIONAR AO PEDIDO
+
+                    </button>
+
+                </div>
+
+            </article>
 
             `;
 
@@ -1135,15 +1961,28 @@ function renderProducts(category = "todos") {
    FILTRO
 ========================================================= */
 
-function filterProducts(category, button) {
+function filterProducts(
+    category,
+    button
+) {
 
     document
-        .querySelectorAll(".categories button")
-        .forEach(btn =>
-            btn.classList.remove("active")
-        );
+        .querySelectorAll(
+            ".categories button"
+        )
+        .forEach(btn => {
 
-    button.classList.add("active");
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    button.classList.add(
+        "active"
+    );
+
 
     renderProducts(category);
 
@@ -1151,16 +1990,22 @@ function filterProducts(category, button) {
 
 
 /* =========================================================
-   ADICIONAR AO CARRINHO
+   ADICIONAR
 ========================================================= */
 
 function addToCart(id) {
 
     const product =
-        products.find(p => p.id === id);
+        products.find(
+            item => item.id === id
+        );
+
 
     const existing =
-        cart.find(item => item.id === id);
+        cart.find(
+            item => item.id === id
+        );
+
 
     if (existing) {
 
@@ -1178,36 +2023,90 @@ function addToCart(id) {
 
     }
 
-    renderCart();
 
-    scrollToCart();
+    renderCart();
 
 }
 
 
 /* =========================================================
-   ALTERAR QUANTIDADE
+   QUANTIDADE
 ========================================================= */
 
-function changeQuantity(id, amount) {
+function changeQuantity(
+    id,
+    amount
+) {
 
     const item =
-        cart.find(product => product.id === id);
+        cart.find(
+            product =>
+            product.id === id
+        );
+
 
     if (!item) return;
 
+
     item.quantity += amount;
+
 
     if (item.quantity <= 0) {
 
         cart =
             cart.filter(
-                product => product.id !== id
+                product =>
+                product.id !== id
             );
 
     }
 
+
     renderCart();
+
+}
+
+
+/* =========================================================
+   SUBTOTAL
+========================================================= */
+
+function getSubtotal() {
+
+    return cart.reduce(
+        (total, item) => {
+
+            return total +
+                item.price *
+                item.quantity;
+
+        },
+        0
+    );
+
+}
+
+
+/* =========================================================
+   TAXA
+========================================================= */
+
+function getDeliveryFee() {
+
+    const type =
+        document.querySelector(
+            'input[name="deliveryType"]:checked'
+        )?.value;
+
+
+    if (type === "retirada") {
+
+        return 0;
+
+    }
+
+
+    return DELIVERY_FEE;
 
 }
 
@@ -1218,11 +2117,9 @@ function changeQuantity(id, amount) {
 
 function getTotal() {
 
-    return cart.reduce(
-        (total, item) =>
-            total +
-            (item.price * item.quantity),
-        0
+    return (
+        getSubtotal() +
+        getDeliveryFee()
     );
 
 }
@@ -1235,16 +2132,25 @@ function getTotal() {
 function renderCart() {
 
     const container =
-        document.getElementById("cartItems");
+        document.getElementById(
+            "cartItems"
+        );
+
 
     container.innerHTML = "";
 
+
     if (cart.length === 0) {
 
-        container.innerHTML =
-            `<p style="color:#999;">
+        container.innerHTML = `
+
+            <div class="cart-empty">
+
                 Seu carrinho está vazio.
-            </p>`;
+
+            </div>
+
+        `;
 
     }
 
@@ -1253,79 +2159,136 @@ function renderCart() {
 
         container.innerHTML += `
 
-            <div class="cart-item">
+        <div class="cart-item">
 
-                <div class="cart-item-top">
+            <div class="cart-item-header">
 
-                    <div>
+                <div>
 
-                        <strong>
-                            ${item.name}
-                        </strong>
+                    <div class="cart-item-name">
 
-                        <br>
-
-                        <small>
-                            ${money(item.price)}
-                        </small>
+                        ${item.name}
 
                     </div>
 
-                    <strong>
-                        ${money(
-                            item.price *
-                            item.quantity
-                        )}
-                    </strong>
+                    <small>
+
+                        ${money(item.price)}
+
+                    </small>
 
                 </div>
 
+                <div class="cart-item-price">
 
-                <div class="qty">
-
-                    <button
-                        onclick="changeQuantity(
-                            ${item.id},
-                            -1
-                        )"
-                    >
-                        −
-                    </button>
-
-                    <span>
-                        ${item.quantity}
-                    </span>
-
-                    <button
-                        onclick="changeQuantity(
-                            ${item.id},
-                            1
-                        )"
-                    >
-                        +
-                    </button>
+                    ${money(
+                        item.price *
+                        item.quantity
+                    )}
 
                 </div>
 
             </div>
+
+
+            <div class="cart-item-controls">
+
+                <button
+                    class="quantity-button"
+                    onclick="
+                        changeQuantity(
+                            ${item.id},
+                            -1
+                        )
+                    "
+                >
+
+                    −
+
+                </button>
+
+
+                <strong>
+
+                    ${item.quantity}
+
+                </strong>
+
+
+                <button
+                    class="quantity-button"
+                    onclick="
+                        changeQuantity(
+                            ${item.id},
+                            1
+                        )
+                    "
+                >
+
+                    +
+
+                </button>
+
+            </div>
+
+        </div>
 
         `;
 
     });
 
 
+    updateTotals();
+
+}
+
+
+/* =========================================================
+   ATUALIZAR TOTAIS
+========================================================= */
+
+function updateTotals() {
+
+    const subtotal =
+        getSubtotal();
+
+
+    const delivery =
+        getDeliveryFee();
+
+
     const total =
-        getTotal();
+        subtotal + delivery;
 
 
     document.getElementById(
         "cartTotal"
-    ).textContent = money(total);
+    ).textContent =
+        money(total);
+
+
+    document.getElementById(
+        "summarySubtotal"
+    ).textContent =
+        money(subtotal);
+
+
+    document.getElementById(
+        "summaryDelivery"
+    ).textContent =
+        money(delivery);
+
+
+    document.getElementById(
+        "summaryTotal"
+    ).textContent =
+        money(total);
 
 
     document.getElementById(
         "barTotal"
-    ).textContent = money(total);
+    ).textContent =
+        money(total);
 
 
     document.getElementById(
@@ -1333,7 +2296,7 @@ function renderCart() {
     ).textContent =
         cart.reduce(
             (sum, item) =>
-                sum + item.quantity,
+            sum + item.quantity,
             0
         );
 
@@ -1344,10 +2307,46 @@ function renderCart() {
 
 
 /* =========================================================
+   ENTREGA / RETIRADA
+========================================================= */
+
+function changeDeliveryType() {
+
+    const type =
+        document.querySelector(
+            'input[name="deliveryType"]:checked'
+        ).value;
+
+
+    const addressFields =
+        document.getElementById(
+            "addressFields"
+        );
+
+
+    if (type === "retirada") {
+
+        addressFields.style.display =
+            "none";
+
+    } else {
+
+        addressFields.style.display =
+            "block";
+
+    }
+
+
+    updateTotals();
+
+}
+
+
+/* =========================================================
    PAGAMENTO
 ========================================================= */
 
-function changePayment() {
+function selectPayment() {
 
     const payment =
         document.querySelector(
@@ -1356,23 +2355,42 @@ function changePayment() {
 
 
     document
-        .getElementById("pixBox")
-        .classList.remove("show");
+        .getElementById(
+            "pixPayment"
+        )
+        .classList.remove(
+            "show"
+        );
+
 
     document
-        .getElementById("moneyBox")
-        .classList.remove("show");
+        .getElementById(
+            "moneyPayment"
+        )
+        .classList.remove(
+            "show"
+        );
+
 
     document
-        .getElementById("cardBox")
-        .classList.remove("show");
+        .getElementById(
+            "cardPayment"
+        )
+        .classList.remove(
+            "show"
+        );
 
 
     if (payment === "pix") {
 
         document
-            .getElementById("pixBox")
-            .classList.add("show");
+            .getElementById(
+                "pixPayment"
+            )
+            .classList.add(
+                "show"
+            );
+
 
         updatePix();
 
@@ -1382,8 +2400,12 @@ function changePayment() {
     if (payment === "dinheiro") {
 
         document
-            .getElementById("moneyBox")
-            .classList.add("show");
+            .getElementById(
+                "moneyPayment"
+            )
+            .classList.add(
+                "show"
+            );
 
     }
 
@@ -1391,8 +2413,12 @@ function changePayment() {
     if (payment === "cartao") {
 
         document
-            .getElementById("cardBox")
-            .classList.add("show");
+            .getElementById(
+                "cardPayment"
+            )
+            .classList.add(
+                "show"
+            );
 
     }
 
@@ -1400,12 +2426,32 @@ function changePayment() {
 
 
 /* =========================================================
-   CRC16 PIX
+   PIX — CAMPO
+========================================================= */
+
+function pixField(
+    id,
+    value
+) {
+
+    return (
+        id +
+        String(value.length)
+            .padStart(2, "0") +
+        value
+    );
+
+}
+
+
+/* =========================================================
+   PIX — CRC16
 ========================================================= */
 
 function crc16(payload) {
 
     let crc = 0xFFFF;
+
 
     for (
         let i = 0;
@@ -1414,7 +2460,9 @@ function crc16(payload) {
     ) {
 
         crc ^=
-            payload.charCodeAt(i) << 8;
+            payload.charCodeAt(i)
+            << 8;
+
 
         for (
             let j = 0;
@@ -1422,11 +2470,13 @@ function crc16(payload) {
             j++
         ) {
 
-            if (crc & 0x8000) {
+            if (
+                crc & 0x8000
+            ) {
 
                 crc =
-                    (crc << 1) ^
-                    0x1021;
+                    (crc << 1)
+                    ^ 0x1021;
 
             } else {
 
@@ -1434,11 +2484,13 @@ function crc16(payload) {
 
             }
 
+
             crc &= 0xFFFF;
 
         }
 
     }
+
 
     return crc
         .toString(16)
@@ -1449,31 +2501,22 @@ function crc16(payload) {
 
 
 /* =========================================================
-   CAMPO PIX
+   GERAR PIX COPIA E COLA
 ========================================================= */
 
-function pixField(id, value) {
+function generatePix(
+    amount
+) {
 
-    return (
-        id +
-        String(value.length).padStart(2, "0") +
-        value
-    );
+    const merchantAccountInformation =
 
-}
-
-
-/* =========================================================
-   GERAR PIX
-========================================================= */
-
-function generatePix(amount) {
-
-    const merchantAccount =
         pixField(
             "00",
             "BR.GOV.BCB.PIX"
-        ) +
+        )
+
+        +
+
         pixField(
             "01",
             PIX_KEY
@@ -1493,7 +2536,7 @@ function generatePix(amount) {
     payload +=
         pixField(
             "26",
-            merchantAccount
+            merchantAccountInformation
         );
 
 
@@ -1514,7 +2557,8 @@ function generatePix(amount) {
     payload +=
         pixField(
             "54",
-            Number(amount).toFixed(2)
+            Number(amount)
+                .toFixed(2)
         );
 
 
@@ -1535,7 +2579,7 @@ function generatePix(amount) {
     payload +=
         pixField(
             "60",
-            "SAO PAULO"
+            PIX_CITY
         );
 
 
@@ -1549,10 +2593,12 @@ function generatePix(amount) {
         );
 
 
-    payload += "6304";
+    payload +=
+        "6304";
 
 
-    payload += crc16(payload);
+    payload +=
+        crc16(payload);
 
 
     return payload;
@@ -1561,22 +2607,43 @@ function generatePix(amount) {
 
 
 /* =========================================================
-   ATUALIZAR PIX
+   ATUALIZAR QR CODE
 ========================================================= */
 
 function updatePix() {
+
+    const pixPayment =
+        document.getElementById(
+            "pixPayment"
+        );
+
+
+    if (
+        !pixPayment.classList.contains(
+            "show"
+        )
+    ) {
+
+        return;
+
+    }
+
 
     const total =
         getTotal();
 
 
+    if (total <= 0) {
+
+        return;
+
+    }
+
+
     document.getElementById(
-        "pixValue"
+        "pixTotal"
     ).textContent =
         money(total);
-
-
-    if (total <= 0) return;
 
 
     const payload =
@@ -1590,7 +2657,9 @@ function updatePix() {
 
 
     const qr =
-        document.getElementById("qrcode");
+        document.getElementById(
+            "qrcode"
+        );
 
 
     qr.innerHTML = "";
@@ -1622,6 +2691,17 @@ function copyPix() {
         ).value;
 
 
+    if (!code) {
+
+        alert(
+            "O código PIX ainda não foi gerado."
+        );
+
+        return;
+
+    }
+
+
     navigator.clipboard
         .writeText(code)
         .then(() => {
@@ -1629,7 +2709,7 @@ function copyPix() {
             document.getElementById(
                 "copyMessage"
             ).textContent =
-                "✅ PIX copiado com sucesso!";
+                "✅ PIX copiado!";
 
         });
 
@@ -1645,7 +2725,7 @@ function finishOrder() {
     if (cart.length === 0) {
 
         alert(
-            "Adicione pelo menos um produto ao carrinho."
+            "Adicione produtos ao carrinho antes de finalizar."
         );
 
         return;
@@ -1655,44 +2735,64 @@ function finishOrder() {
 
     const name =
         document
-            .getElementById("customerName")
-            .value.trim();
+        .getElementById(
+            "customerName"
+        )
+        .value.trim();
 
 
     const phone =
         document
-            .getElementById("customerPhone")
-            .value.trim();
+        .getElementById(
+            "customerPhone"
+        )
+        .value.trim();
+
+
+    const deliveryType =
+        document.querySelector(
+            'input[name="deliveryType"]:checked'
+        ).value;
 
 
     const address =
         document
-            .getElementById("address")
-            .value.trim();
+        .getElementById(
+            "address"
+        )
+        .value.trim();
 
 
     const neighborhood =
         document
-            .getElementById("neighborhood")
-            .value.trim();
+        .getElementById(
+            "neighborhood"
+        )
+        .value.trim();
 
 
     const complement =
         document
-            .getElementById("complement")
-            .value.trim();
+        .getElementById(
+            "complement"
+        )
+        .value.trim();
 
 
     const reference =
         document
-            .getElementById("reference")
-            .value.trim();
+        .getElementById(
+            "reference"
+        )
+        .value.trim();
 
 
     const observation =
         document
-            .getElementById("orderObservation")
-            .value.trim();
+        .getElementById(
+            "observation"
+        )
+        .value.trim();
 
 
     const payment =
@@ -1701,9 +2801,13 @@ function finishOrder() {
         )?.value;
 
 
+    /* VALIDAÇÕES */
+
     if (!name) {
 
-        alert("Informe seu nome.");
+        alert(
+            "Informe seu nome."
+        );
 
         return;
 
@@ -1712,27 +2816,39 @@ function finishOrder() {
 
     if (!phone) {
 
-        alert("Informe seu WhatsApp.");
+        alert(
+            "Informe seu WhatsApp."
+        );
 
         return;
 
     }
 
 
-    if (!address) {
+    if (
+        deliveryType === "entrega"
+    ) {
 
-        alert("Informe o endereço.");
+        if (!address) {
 
-        return;
+            alert(
+                "Informe o endereço."
+            );
 
-    }
+            return;
+
+        }
 
 
-    if (!neighborhood) {
+        if (!neighborhood) {
 
-        alert("Informe o bairro.");
+            alert(
+                "Informe o bairro."
+            );
 
-        return;
+            return;
+
+        }
 
     }
 
@@ -1748,6 +2864,8 @@ function finishOrder() {
     }
 
 
+    /* PAGAMENTO */
+
     let paymentText = "";
 
 
@@ -1755,19 +2873,30 @@ function finishOrder() {
 
         paymentText =
             "⚡ PIX\n" +
-            "Titular: R F NASCIMENTO\n" +
+            "Titular: " +
+            PIX_OWNER +
+            "\n" +
             "Chave: " +
-            PIX_KEY;
+            PIX_KEY +
+            "\n" +
+            "Valor: " +
+            money(
+                getTotal()
+            );
 
     }
 
 
-    if (payment === "dinheiro") {
+    if (
+        payment === "dinheiro"
+    ) {
 
         const change =
             document
-                .getElementById("changeFor")
-                .value;
+            .getElementById(
+                "changeFor"
+            )
+            .value;
 
 
         paymentText =
@@ -1778,7 +2907,9 @@ function finishOrder() {
 
             paymentText +=
                 "\nTroco para: " +
-                money(Number(change));
+                money(
+                    Number(change)
+                );
 
         } else {
 
@@ -1790,7 +2921,9 @@ function finishOrder() {
     }
 
 
-    if (payment === "cartao") {
+    if (
+        payment === "cartao"
+    ) {
 
         paymentText =
             "💳 CARTÃO\n" +
@@ -1798,6 +2931,8 @@ function finishOrder() {
 
     }
 
+
+    /* MENSAGEM */
 
     let message = "";
 
@@ -1807,74 +2942,118 @@ function finishOrder() {
 
 
     message +=
-        "👤 *CLIENTE*\n" +
+        "👤 *CLIENTE*\n";
+
+    message +=
+        "Nome: " +
         name +
         "\n";
 
-
     message +=
-        "📱 WhatsApp: " +
+        "WhatsApp: " +
         phone +
         "\n\n";
 
 
     message +=
-        "📦 *PEDIDO*\n\n";
+        "📦 *ITENS DO PEDIDO*\n\n";
 
 
-    cart.forEach(item => {
+    cart.forEach(
+        item => {
 
-        message +=
-            item.quantity +
-            "x " +
-            item.name +
-            " — " +
-            money(
-                item.price *
-                item.quantity
-            ) +
-            "\n";
+            message +=
 
-    });
+                item.quantity +
+                "x " +
+                item.name +
+                " — " +
+                money(
+                    item.price *
+                    item.quantity
+                ) +
+                "\n";
 
-
-    message +=
-        "\n💰 *TOTAL: " +
-        money(getTotal()) +
-        "*\n\n";
+        }
+    );
 
 
     message +=
-        "💳 *PAGAMENTO*\n" +
-        paymentText +
+        "\n💰 *SUBTOTAL:* " +
+        money(
+            getSubtotal()
+        ) +
+        "\n";
+
+
+    message +=
+        "🚚 *ENTREGA:* " +
+        money(
+            getDeliveryFee()
+        ) +
+        "\n";
+
+
+    message +=
+        "💵 *TOTAL:* " +
+        money(
+            getTotal()
+        ) +
         "\n\n";
 
 
     message +=
-        "📍 *ENDEREÇO*\n" +
-        address +
-        "\n" +
-        "Bairro: " +
-        neighborhood +
-        "\n";
+        "💳 *FORMA DE PAGAMENTO*\n";
+
+    message +=
+        paymentText +
+        "\n\n";
 
 
-    if (complement) {
-
-        message +=
-            "Complemento: " +
-            complement +
-            "\n";
-
-    }
-
-
-    if (reference) {
+    if (
+        deliveryType === "entrega"
+    ) {
 
         message +=
-            "Referência: " +
-            reference +
+            "🛵 *TIPO: ENTREGA*\n\n";
+
+
+        message +=
+            "📍 *ENDEREÇO*\n";
+
+        message +=
+            address +
             "\n";
+
+        message +=
+            "Bairro: " +
+            neighborhood +
+            "\n";
+
+
+        if (complement) {
+
+            message +=
+                "Complemento: " +
+                complement +
+                "\n";
+
+        }
+
+
+        if (reference) {
+
+            message +=
+                "Referência: " +
+                reference +
+                "\n";
+
+        }
+
+    } else {
+
+        message +=
+            "🏪 *TIPO: RETIRADA NO LOCAL*\n\n";
 
     }
 
@@ -1882,7 +3061,9 @@ function finishOrder() {
     if (observation) {
 
         message +=
-            "\n📝 *OBSERVAÇÃO*\n" +
+            "\n📝 *OBSERVAÇÃO*\n";
+
+        message +=
             observation +
             "\n";
 
@@ -1893,13 +3074,15 @@ function finishOrder() {
         "\n🍔 Obrigado por pedir na Burg House!";
 
 
+    /* WHATSAPP */
+
     if (
         WHATSAPP_NUMBER ===
         "COLOQUE_SEU_WHATSAPP_AQUI"
     ) {
 
         alert(
-            "Configure o número do WhatsApp da Burg House no código."
+            "Configure o número do WhatsApp da Burg House no código antes de finalizar."
         );
 
         return;
@@ -1911,7 +3094,9 @@ function finishOrder() {
         "https://wa.me/" +
         WHATSAPP_NUMBER +
         "?text=" +
-        encodeURIComponent(message);
+        encodeURIComponent(
+            message
+        );
 
 
     window.open(
@@ -1923,13 +3108,15 @@ function finishOrder() {
 
 
 /* =========================================================
-   SCROLL PARA O CARRINHO
+   IR PARA CARRINHO
 ========================================================= */
 
-function scrollToCart() {
+function goToCart() {
 
     document
-        .getElementById("cart")
+        .getElementById(
+            "cart"
+        )
         .scrollIntoView({
             behavior: "smooth"
         });
@@ -1938,7 +3125,7 @@ function scrollToCart() {
 
 
 /* =========================================================
-   INICIAR
+   INICIALIZAÇÃO
 ========================================================= */
 
 renderProducts();
@@ -1948,5 +3135,6 @@ renderCart();
 </script>
 
 </body>
+
 </html>
 ```
