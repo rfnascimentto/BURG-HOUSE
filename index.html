@@ -1170,6 +1170,26 @@ const products = [
 
 {
     id: 1,
+    name: "Clássico X-Salada",
+    category: "hamburgueres",
+    price: 10.00,
+    image: "images/Clássico X-Salada.jpg",
+    description:
+    "Pão de hambúrguer, carne hambúrguer 100g, queijo mussarela, alface, tomate e molho especial."
+},
+
+{
+    id: 2,
+    name: "kikão",
+    category: "hamburgueres",
+    price: 10.00,
+    image: "images/kikão.jpg",
+    description:
+    "Pão, Salsicha 50g, queijo parmesão, repolho, milho, ervilha, abacaxi, ovo codor. e molho especial."
+},
+
+{
+    id: 3,
     name: "Clássico House",
     category: "hamburgueres",
     price: 24.90,
@@ -1179,7 +1199,7 @@ const products = [
 },
 
 {
-    id: 2,
+    id: 4,
     name: "Cheddar Bacon",
     category: "hamburgueres",
     price: 29.90,
@@ -1189,7 +1209,7 @@ const products = [
 },
 
 {
-    id: 3,
+    id: 5,
     name: "Brutus Bacon",
     category: "hamburgueres",
     price: 34.90,
@@ -1199,7 +1219,7 @@ const products = [
 },
 
 {
-    id: 4,
+    id: 6,
     name: "Chicken Crispy",
     category: "hamburgueres",
     price: 26.90,
@@ -1209,7 +1229,7 @@ const products = [
 },
 
 {
-    id: 5,
+    id: 7,
     name: "Duplo Smash",
     category: "hamburgueres",
     price: 31.90,
@@ -1218,20 +1238,30 @@ const products = [
     "Dois hambúrgueres smash 100g, queijo cheddar duplo, cebola grelhada e molho especial."
 },
 
-{
-    id: 6,
-    name: "Veggie Burger",
-    category: "hamburgueres",
-    price: 27.90,
-    image: "images/veggie-burger.jpg",
-    description:
-    "Hambúrguer vegetal, queijo, alface, tomate e molho verde."
-},
-
 /* COMBOS */
 
 {
-    id: 7,
+    id: 8,
+    name: "Combo X-Salada",
+    category: "combos",
+    price: 29.99,
+    image: "images/combo-X-Salada.jpg",
+    description:
+    "3 X-Salada + Refrigerante 2L."
+},
+      
+{
+    id: 9,
+    name: "Combo Solo",
+    category: "combos",
+    price: 15.99,
+    image: "images/combo-Solo.jpg",
+    description:
+    "X-Salada + batata Frita P + Refrigerante Lata."
+},
+      
+{
+    id: 10,
     name: "Combo Clássico",
     category: "combos",
     price: 34.90,
@@ -1241,7 +1271,7 @@ const products = [
 },
 
 {
-    id: 8,
+    id: 11,
     name: "Combo Cheddar",
     category: "combos",
     price: 39.90,
@@ -1251,7 +1281,7 @@ const products = [
 },
 
 {
-    id: 9,
+    id: 12,
     name: "Combo Brutus",
     category: "combos",
     price: 49.90,
@@ -1261,7 +1291,7 @@ const products = [
 },
 
 {
-    id: 10,
+    id: 13,
     name: "Combo Chicken",
     category: "combos",
     price: 36.90,
@@ -1271,7 +1301,7 @@ const products = [
 },
 
 {
-    id: 11,
+    id: 14,
     name: "Combo Família",
     category: "combos",
     price: 119.90,
@@ -1283,17 +1313,17 @@ const products = [
 /* PORÇÕES */
 
 {
-    id: 12,
+    id: 15,
     name: "Batata Frita P",
     category: "porcoes",
-    price: 12.90,
+    price: 7.90,
     image: "images/batata-p.jpg",
     description:
     "Batata frita tamanho pequeno."
 },
 
 {
-    id: 13,
+    id: 16,
     name: "Batata Frita M",
     category: "porcoes",
     price: 17.90,
@@ -1303,17 +1333,37 @@ const products = [
 },
 
 {
-    id: 14,
+    id: 17,
     name: "Batata Frita G",
     category: "porcoes",
-    price: 22.90,
+    price: 21.90,
     image: "images/batata-g.jpg",
     description:
     "Batata frita tamanho grande."
 },
 
 {
-    id: 15,
+    id: 18,
+    name: "SalchiPapas",
+    category: "porcoes",
+    price: 14.90,
+    image: "images/salchipapas.jpg",
+    description:
+    "Batata frita com salsicha."
+},
+      
+{
+    id: 19,
+    name: "CalaPapas",
+    category: "porcoes",
+    price: 19.90,
+    image: "images/calapapas.jpg",
+    description:
+    "Batata frita com calabresa."
+},
+      
+{
+    id: 20,
     name: "Batata Cheddar e Bacon",
     category: "porcoes",
     price: 29.90,
@@ -1323,7 +1373,7 @@ const products = [
 },
 
 {
-    id: 16,
+    id: 21,
     name: "Onion Rings",
     category: "porcoes",
     price: 19.90,
@@ -1333,7 +1383,7 @@ const products = [
 },
 
 {
-    id: 17,
+    id: 22,
     name: "Torresmo Crocante",
     category: "porcoes",
     price: 24.90,
@@ -1343,7 +1393,7 @@ const products = [
 },
 
 {
-    id: 18,
+    id: 23,
     name: "Frango Crocante",
     category: "porcoes",
     price: 29.90,
@@ -1355,57 +1405,77 @@ const products = [
 /* BEBIDAS */
 
 {
-    id: 19,
+    id: 24,
     name: "Refrigerante Lata 350ml",
     category: "bebidas",
     price: 6.00,
     image: "images/refrigerante-lata.jpg",
     description:
-    "Refrigerante lata 350ml."
+    "Refrigerante lata 350ml Coca normal e zero, Fanta laranja e uva, Guaraná Antarctica e Baré."
 },
 
 {
-    id: 20,
-    name: "Refrigerante 600ml",
+    id: 25,
+    name: "Refrigerante 1l",
     category: "bebidas",
     price: 9.00,
-    image: "images/refrigerante-600.jpg",
+    image: "images/refrigerante-1l.jpg",
     description:
-    "Refrigerante 600ml."
+    "Refrigerante 1l, Baré, Antarctica e coca."
 },
 
 {
-    id: 21,
-    name: "Refrigerante 2L",
+    id: 26,
+    name: "Coca-Cola 2L",
     category: "bebidas",
-    price: 14.00,
+    price: 15.00,
     image: "images/refrigerante-2l.jpg",
     description:
     "Refrigerante 2 litros."
 },
 
 {
-    id: 22,
-    name: "Água Mineral",
+    id: 27,
+    name: "Coca-Cola Zero 2L",
     category: "bebidas",
-    price: 4.00,
-    image: "images/agua.jpg",
+    price: 15.00,
+    image: "images/coca-cola-zero.jpg",
     description:
-    "Água mineral."
+    "Refrigerante 2 litros."
+},
+      
+{
+    id: 28,
+    name: "Guaraná Antarctica 2L",
+    category: "bebidas",
+    price: 15.00,
+    image: "images/guarana-antarctica.jpg",
+    description:
+    "Refrigerante 2 litros."
+},
+      
+{
+    id: 29,
+    name: "Refrigerante 2L",
+    category: "bebidas",
+    price: 10.00,
+    image: "images/refrigerantes.jpg",
+    description:
+    "Refriegerantes 2L Biz Cola, Tauá e Baré."
 },
 
 {
-    id: 23,
+    id: 30,
     name: "Suco Natural",
     category: "bebidas",
     price: 8.00,
     image: "images/suco-natural.jpg",
     description:
-    "Suco natural."
+    "Suco natural Amora c/ Leite, Acerola, Maracujá, Graviola c/ Leite e Goiaba c/ Leite."
 },
 
 {
-    id: 24,
+    id: 31,
     name: "Milk-shake",
     category: "bebidas",
     price: 16.90,
